@@ -1,6 +1,7 @@
 from database import database
 
 class Emprestimos(database.Model):
+    __tablename__= 'emprestimos'
     id = database.Column(database.Integer, primary_key=True)  # Chave primária
     id_usuario = database.Column(database.Integer, database.ForeignKey("usuarios.id"), nullable=False)
     id_livro = database.Column(database.Integer, database.ForeignKey("livros.id"), nullable=False)

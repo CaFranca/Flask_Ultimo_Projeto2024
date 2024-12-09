@@ -1,6 +1,6 @@
 from flask import Flask, render_template,flash
-from controller.controller import blueprint_default as pagina
-from model.model import MeuMiddleware
+from controller import blueprint_default
+from model import MeuMiddleware
 from database import init_database
 
 app = Flask(__name__)
@@ -9,10 +9,10 @@ app.secret_key = 'top_seguranca'  # Defina uma chave secreta para a sessão
 
 # Configurações de segurança para cookies de sessão
 app.config['SESSION_COOKIE_HTTPONLY'] = True  # Protege contra XSS
-app.config['SESSION_COOKIE_SECURE'] = True  # Só envia o cookie via HTTPS
+app.config['SESSION_COOKIE_SECURE'] = False  # Só envia o cookie via HTTPS
 
 
-app.register_blueprint(pagina)
+app.register_blueprint(blueprint_default)
 
 app.wsgi_app = MeuMiddleware(app.wsgi_app)
 

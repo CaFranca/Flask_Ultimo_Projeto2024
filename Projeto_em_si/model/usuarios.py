@@ -1,6 +1,7 @@
 from database import database
 
 class Usuarios(database.Model):
+    __tablename__= 'usuarios'
     id = database.Column(database.Integer, primary_key=True)  # Chave primária
     nome = database.Column(database.String(100), nullable=False)  # Nome do usuário
     email = database.Column(database.String(120), unique=True, nullable=False)  # Email único

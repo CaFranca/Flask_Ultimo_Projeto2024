@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, make_response, flash,abort
-from model.model import usuarios
+from model import usuarios_antigos
 import json; from functools import wraps;  from collections import defaultdict
 import hashlib
 
@@ -34,7 +34,7 @@ def login():
     
         usuario_encontrado = False  # Variável para verificar se o usuário existe
 
-        for usuario in usuarios:
+        for usuario in usuarios_antigos:
             if usuario.login == login:  # Se o login do usuário for encontrado
                 usuario_encontrado = True  # Usuário existe
                 

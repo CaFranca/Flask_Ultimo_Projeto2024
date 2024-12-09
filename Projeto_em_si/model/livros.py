@@ -1,6 +1,7 @@
 from database import database
 
 class Livros(database.Model):
+    __tablename__= 'livros'
     id = database.Column(database.Integer, primary_key=True)  # Chave primária
     titulo = database.Column(database.String(200), nullable=False)  # Título do livro
     autor = database.Column(database.String(100), nullable=False)  # Nome do autor
