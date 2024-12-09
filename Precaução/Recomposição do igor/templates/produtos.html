@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produtos</title>
+    <!-- Referência ao arquivo de estilo -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Referência ao arquivo JavaScript -->
+    <script src="{{ url_for('static', filename='js/produtos.js') }}" defer></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Produtos</h1>
+
+        <!-- Lista de produtos -->
+        <div class="produtos-list">
+            <div class="product-grid">
+                {% for produto in produtos %}
+                <div class="product-card">
+                    <h3>{{ produto['nome'] }}</h3>
+                    <p>R$ {{ produto['preco'] }}</p>
+                    <button class="detalhes-btn" data-id="{{ produto['id'] }}">Ver Detalhes</button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Navegação de páginas -->
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('produtos_list', page=page-1) }}" class="prev">Anterior</a>
+            {% endif %}
+            <span>Página {{ page }} de {{ total_pages }}</span>
+            {% if page < total_pages %}
+            <a href="{{ url_for('produtos_list', page=page+1) }}" class="next">Próxima</a>
+            {% endif %}
+            {% if page > 1 %}
+            <br><br><br><a href="{{ url_for('produtos_list', page=1) }}" class="home">Voltar ao inicio</a>
+            {% endif %}
+
+            {% if page > 0 and page < 4 %}
+            <br><br><br><a href="{{ url_for('produtos_list', page=4) }}" class="home">Ir para o Final</a>
+            {% endif %}
+        </div>
+
+        <!-- Modal de detalhes -->
+        <div id="produtoModal" style="display:none;">
+            <div id="produtoModalContent">
+                <h3 id="produtoNome"></h3>
+                <p id="produtoDescricao"></p>
+                <p>Preço: R$ <span id="produtoPreco"></span></p>
+                <button id="fecharModal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
