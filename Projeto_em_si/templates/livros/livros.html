@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Livros</title>
+</head>
+<body>
+    <h1>Lista de Livros</h1>
+
+    <!-- Formulário de pesquisa -->
+    <form method="get" action="{{ url_for('bp_books.view_books') }}">
+        <input type="text" name="titulo" placeholder="Pesquisar por título" value="{{ request.args.get('titulo', '') }}">
+        <input type="text" name="autor_id" placeholder="Pesquisar por autor" value="{{ request.args.get('autor_id', '') }}">
+        <input type="text" name="categoria_id" placeholder="Pesquisar por categoria" value="{{ request.args.get('categoria_id', '') }}">
+        <input type="date" name="data_inicio" placeholder="Data de publicação" value="{{ request.args.get('data_inicio', '') }}">
+        <button type="submit">Pesquisar</button>
+    </form>
+
+    <h2>Resultados da pesquisa</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Editora</th>
+                <th>ISBN</th>
+                <th>Data de Publicação</th>
+                <th>Quantidade Total</th>
+                <th>Quantidade Disponível</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for livro in livros %}
+                <tr>
+                    <td>{{ livro.titulo }}</td>
+                    <td>{{ livro.autor }}</td>
+                    <td>{{ livro.editora }}</td>
+                    <td>{{ livro.isbn }}</td>
+                    <td>{{ livro.data_publicacao }}</td>
+                    <td>{{ livro.quantidade_total }}</td>
+                    <td>{{ livro.quantidade_disponivel }}</td>
+                    <td>
+                        <a href="{{ url_for('bp_books.edit_book', id=livro.id) }}">Editar</a> |
+                        <!-- Formulário de exclusão do livro -->
+                        <form action="{{ url_for('bp_books.delete_book', id=livro.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" onclick="return confirm('Tem certeza que deseja excluir o livro?')">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ url_for('bp_books.add_book') }}">Adicionar novo livro</a>
+</body>
+</html>

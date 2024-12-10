@@ -1,6 +1,7 @@
-from model import Livros, Autores, Categorias
 from database import database
-from datetime import datetime
+from model import Livros, Autores, Categorias
+
+
 
 class LivroDAO:
     @staticmethod
@@ -9,16 +10,18 @@ class LivroDAO:
         return Livros.query.all()
 
     @staticmethod
-    def addBook(titulo, isbn, data_publicacao, numero_paginas, autor_id, categoria_id):
+    def addBook(titulo, autor, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
         try:
             # Cria um novo objeto Livro
             novo_livro = Livros(
                 titulo=titulo,
+                autor=autor,
+                editora=editora,
+                ano_publicacao=ano_publicacao,
+                genero=genero,
                 isbn=isbn,
-                data_publicacao=data_publicacao,
-                numero_paginas=numero_paginas,
-                autor_id=autor_id,
-                categoria_id=categoria_id,
+                quantidade_total=quantidade_total,
+                quantidade_disponivel=quantidade_disponivel,
             )
             # Adiciona o livro ao banco de dados
             database.session.add(novo_livro)
@@ -32,22 +35,20 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def updateBook(id, titulo, isbn, data_publicacao, numero_paginas, autor_id, categoria_id):
+    def updateBook(id, titulo, autor, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
         try:
-            # Converte a data_publicacao para um objeto datetime.date, se necessário
-            if isinstance(data_publicacao, str):
-                data_publicacao = datetime.strptime(data_publicacao, "%Y-%m-%d").date()
-            
             # Busca o livro pelo ID
             livro = Livros.query.get(id)
             if livro:
                 # Atualiza os campos do livro
                 livro.titulo = titulo
+                livro.autor = autor
+                livro.editora = editora
+                livro.ano_publicacao = ano_publicacao
+                livro.genero = genero
                 livro.isbn = isbn
-                livro.data_publicacao = data_publicacao
-                livro.numero_paginas = numero_paginas
-                livro.autor_id = autor_id
-                livro.categoria_id = categoria_id
+                livro.quantidade_total = quantidade_total
+                livro.quantidade_disponivel = quantidade_disponivel
                 # Confirma a transação
                 database.session.commit()
                 return True
@@ -62,16 +63,24 @@ class LivroDAO:
     def getBookById(id):
         # Retorna o livro pelo ID
         return Livros.query.get(id)
-
+    
     @staticmethod
     def getAutores():
-        # Retorna todos os autores
-        return Autores.query.all()
+        try:
+            autores = database.session.query(Livros.autor).distinct().all()
+            return [autor[0] for autor in autores]  # Extraindo apenas os nomes
+        except Exception as e:
+            print(f"Erro ao buscar autores: {e}")
+            return []
 
     @staticmethod
-    def getCategorias():
-        # Retorna todas as categorias
-        return Categorias.query.all()
+    def getCategoria():
+        try:
+            generos = database.session.query(Livros.genero).distinct().all()
+            return [genero[0] for genero in generos]  # Extraindo apenas os nomes
+        except Exception as e:
+            print(f"Erro ao buscar gêneros: {e}")
+            return []
 
     @staticmethod
     def deleteBook(id):
@@ -92,29 +101,33 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def searchBooksCustom(titulo=None, autor_id=None, categoria_id=None, data_inicio=None, isbn=None):
+    def searchBooksCustom(titulo=None, autor=None, editora=None, genero=None, ano_inicio=None, isbn=None):
         # Cria a consulta básica para livros
         query = Livros.query
-        
+
         # Filtro por título, se fornecido
         if titulo:
             query = query.filter(Livros.titulo.like(f"%{titulo}%"))
-        
+
         # Filtro por autor, se fornecido
-        if autor_id:
-            query = query.filter(Livros.autor_id == autor_id)
-        
-        # Filtro por categoria, se fornecido
-        if categoria_id:
-            query = query.filter(Livros.categoria_id == categoria_id)
-        
-        # Filtro por data de publicação, se fornecida
-        if data_inicio:
-            query = query.filter(Livros.data_publicacao >= data_inicio)
+        if autor:
+            query = query.filter(Livros.autor.like(f"%{autor}%"))
+
+        # Filtro por editora, se fornecido
+        if editora:
+            query = query.filter(Livros.editora.like(f"%{editora}%"))
+
+        # Filtro por gênero, se fornecido
+        if genero:
+            query = query.filter(Livros.genero.like(f"%{genero}%"))
+
+        # Filtro por ano de publicação, se fornecido
+        if ano_inicio:
+            query = query.filter(Livros.ano_publicacao >= ano_inicio)
 
         # Filtro por ISBN, se fornecido
         if isbn:
             query = query.filter(Livros.isbn.like(f"%{isbn}%"))
-        
+
         # Retorna a lista de livros conforme os filtros
         return query.all()
