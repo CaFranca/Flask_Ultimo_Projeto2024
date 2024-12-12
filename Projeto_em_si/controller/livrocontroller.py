@@ -19,9 +19,11 @@ def add_book():
             numero_paginas = request.form.get('numeroPaginas', '').strip()
             autor_id = request.form.get('autor_id', '').strip()
             categoria_id = request.form.get('categoria_id', '').strip()
+            quantidade_total = request.form.get('quantidadeTotal', '').strip()
+            quantidade_disponivel = request.form.get('quantidadeDisponivel', '').strip()
 
             # Valida e converte os dados
-            if not titulo or not isbn or not data_publicacaoBruta or not autor_id or not categoria_id:
+            if not titulo or not isbn or not data_publicacaoBruta or not autor_id or not categoria_id or not quantidade_total or not quantidade_disponivel:
                 return "Todos os campos obrigatórios devem ser preenchidos.", 400
 
             try:
@@ -32,6 +34,8 @@ def add_book():
             numero_paginas = int(numero_paginas) if numero_paginas.isdigit() else None
             autor_id = int(autor_id) if autor_id.isdigit() else None
             categoria_id = int(categoria_id) if categoria_id.isdigit() else None
+            quantidade_total = int(quantidade_total) if quantidade_total.isdigit() else None
+            quantidade_disponivel = int(quantidade_disponivel) if quantidade_disponivel.isdigit() else None
 
             # Chama o repositório para adicionar o livro
             sucesso = livroRepository.addBook(
@@ -40,7 +44,9 @@ def add_book():
                 data_publicacao=data_publicacao,
                 numero_paginas=numero_paginas,
                 autor_id=autor_id,
-                categoria_id=categoria_id
+                categoria_id=categoria_id,
+                quantidade_total=quantidade_total,
+                quantidade_disponivel=quantidade_disponivel
             )
 
             if sucesso:
@@ -95,22 +101,35 @@ def view_books():
         print(f"Erro ao carregar a página de livros: {e}")
         return "Ocorreu um erro ao carregar a página de livros.", 500
 
-
 @livroController.route('/editar/<int:id>', methods=['GET', 'POST'])
 def edit_book(id):
-
     if request.method == 'POST':
         # Coleta os dados do formulário
-        titulo = request.form.get('titulo')
-        isbn = request.form.get('isbn')
-        data_publicacao = request.form.get('data_publicacao')
-        numero_paginas = request.form.get('numero_paginas')
-        autor_id = request.form.get('autor_id')
-        categoria_id = request.form.get('categoria_id')
+        titulo = request.form.get('titulo', '').strip()
+        isbn = request.form.get('isbn', '').strip()
+        data_publicacaoBruta = request.form.get('data_publicacao', '').strip()
+        numero_paginas = request.form.get('numero_paginas', '').strip()
+        autor_id = request.form.get('autor_id', '').strip()
+        categoria_id = request.form.get('categoria_id', '').strip()
+        quantidade_total = request.form.get('quantidade_total', '').strip()
+        quantidade_disponivel = request.form.get('quantidade_disponivel', '').strip()
+
+        try:
+            data_publicacao = datetime.strptime(data_publicacaoBruta, '%Y-%m-%d').date()
+        except ValueError:
+            return "Data de publicação inválida. Use o formato YYYY-MM-DD.", 400
 
         # Chama o método para atualizar o livro
         resultado = livroRepository.updateBook(
-            id, titulo, isbn, data_publicacao, numero_paginas, autor_id, categoria_id
+            id,
+            titulo,
+            isbn,
+            data_publicacao,
+            numero_paginas,
+            autor_id,
+            categoria_id,
+            quantidade_total,
+            quantidade_disponivel
         )
 
         if "Erro" in resultado:
@@ -122,7 +141,7 @@ def edit_book(id):
     # Se for GET, carrega os dados do livro para o formulário
     livro = livroRepository.getBookById(id)
     autores = livroRepository.getAutores()
-    categorias = livroRepository.getCategorias()
+    categorias = livroRepository.getCategoria()
 
     return render_template('livros/LivroEdit.html', livro=livro, autores=autores, categorias=categorias)
 
@@ -137,8 +156,6 @@ def delete_book(id):
     else:
         # Caso contrário, redireciona de volta para a lista de livros
         return redirect(url_for('bp_books.view_books'))
-
-
 
 # Rota inicial para renderizar uma página específica para livros
 @livroController.route("/")

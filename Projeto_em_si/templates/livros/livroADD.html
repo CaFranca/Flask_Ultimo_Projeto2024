@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Livro</title>
 </head>
+
 <body>
     <h1>Adicionar Novo Livro</h1>
 
@@ -22,22 +24,21 @@
         <input type="number" name="numeroPaginas" required><br>
 
         <label for="autor_id">Autor:</label>
-        <select name="autor_id" required>
-            {% for autor in autores %}
-                <option value="{{ autor.id }}">{{ autor.nome }}</option>
-            {% endfor %}
-        </select><br>
+        <input type="text" name="autor_id" required><br>
 
         <label for="categoria_id">Categoria:</label>
-        <select name="categoria_id" required>
-            {% for categoria in categorias %}
-                <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-            {% endfor %}
-        </select><br>
+        <input type="text" name="categoria_id" required><br>
+
+        <label for="quantidadeTotal">Total disponivel:</label>
+        <input type="number" name="quantidadeTotal" required><br>
+
+        <label for="quantidadeDisponivel">Quantidade disponivel atualmente:</label>
+        <input type="number" name="quantidadeDisponivel" required><br>
 
         <button type="submit">Adicionar Livro</button>
     </form>
 
     <a href="{{ url_for('bp_books.view_books') }}">Voltar para a lista de livros</a>
 </body>
+
 </html>
