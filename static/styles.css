@@ -1,10 +1,10 @@
+/* Base Styles */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #24223f; /* Preto */
     display: flex;
     justify-content: center; 
     align-items: flex-start;
-    height: auto;
     margin: 0;
     padding: 20px;
 }
@@ -13,35 +13,33 @@ body {
     background-color: #4f4c6c; 
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0px 0px 15px #3a3755;
+    box-shadow: 0 0 15px #3a3755;
     width: 100%;
     max-width: 1200px;
     color: #ffffff;
-    position: relative;
 }
 
-.container h1 {
-    text-align: center;
+h1, h3 {
+    margin-bottom: 20px;
     color: #ffffff;
-    font-size: 2em;  
-    margin-bottom: 20px;  
 }
 
+/* Grid & Cards */
 .product-grid {
     display: flex;
     transition: transform 0.5s ease-in-out;
-    width: 100%;
     overflow: hidden;
+    width: fit-content;
 }
 
 .product-card {
-    background-color: #4f4c6c; /* Roxo escuro */
+    background-color: #24223f; /* Roxo escuro */
     border-radius: 8px;  
     padding: 15px;  
     margin: 0 10px;
+    text-align: center;
+    width: 25%; 
     transition: transform 0.2s;  
-    text-align: center;         
-    width: 22%; 
 }
 
 .product-card:hover {
@@ -55,6 +53,7 @@ body {
     border-radius: 5px;  
 }
 
+/* Form Styles */
 label, input, select, button {
     display: block;
     width: 95%;
@@ -84,6 +83,7 @@ button:hover {
     transform: scale(1.05);  
 }
 
+/* Carousel Controls */
 .prev, .next {
     position: absolute;
     top: 50%;
@@ -115,75 +115,7 @@ button:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Leve cor branca ao passar o mouse */
 }
 
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-}
-
-.product-grid {
-    display: flex;
-    transition: transform 0.5s ease-in-out; 
-    width: fit-content; 
-}
-
-.product-card {
-    background-color: #24223f; 
-    border-radius: 8px;  
-    padding: 15px;  
-    margin: 0 10px;
-    transition: transform 0.2s;  
-    text-align: center;  
-    width: 25%; 
-}
-
-.prev, .next {
-    padding: 10px;
-    font-size: 16px;
-}
-
-@media (max-width: 768px) {
-    .product-card {
-        width: 45%; 
-    }
-
-    .prev, .next {
-        padding: 15px; 
-        font-size: 18px;
-    }
-}
-
-@media (max-width: 480px) {
-    .product-card {
-        width: 90%; 
-    }
-}
-
-@keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(-10px); 
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0); 
-    }
-}
-
-@media (max-width: 768px) {
-    .alert {
-        font-size: 14px;
-        padding: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .alert {
-        font-size: 12px;
-        padding: 8px;
-    }
-}
-
+/* Alerts */
 .alert {
     padding: 15px;
     border-radius: 5px;
@@ -191,7 +123,6 @@ button:hover {
     font-size: 16px;
     font-weight: bold;
     width: 100%;
-    text-align: left; 
     display: flex; 
     align-items: center;
     position: relative; 
@@ -213,7 +144,6 @@ button:hover {
 .alert-success {
     background-color: #388e3c; /* Verde escuro */
     color: white;
-    animation: fade-in-out 3s ease-in-out forwards; 
 }
 
 .alert-success::before {
@@ -238,28 +168,28 @@ button:hover {
     background-color: #f57c00; /* Laranja mais escuro para o paralelogramo do aviso */
 }
 
+/* Fade In-Out Animation */
 @keyframes fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fade-in-out {
-    0%, 80% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
+    0%, 80% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-10px); }
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
+    .product-card {
+        width: 45%; 
+    }
+
+    .prev, .next {
+        padding: 15px; 
+        font-size: 18px;
+    }
+
     .alert {
         font-size: 14px;
         padding: 10px;
@@ -267,6 +197,10 @@ button:hover {
 }
 
 @media (max-width: 480px) {
+    .product-card {
+        width: 90%; 
+    }
+
     .alert {
         font-size: 12px;
         padding: 8px;

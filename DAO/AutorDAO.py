@@ -1,15 +1,19 @@
 from model import Autores
 from database import database
-from datetime import datetime
+from sqlalchemy.exc import SQLAlchemyError
 
 class AutorDAO:
     @staticmethod
     def searchAutores():
-        # Retorna todos os autores do banco de dados
-        return Autores.query.all()
+        try:
+            # Retorna todos os autores do banco de dados
+            return Autores.query.all()
+        except SQLAlchemyError as e:
+            print(f"Erro ao buscar autores: {e}")
+            return []
 
     @staticmethod
-    def addAutor(nome, data_nascimento, nacionalidade):
+    def addAutor(nome: str, data_nascimento: str, nacionalidade: str):
         try:
             # Cria um novo objeto Autor
             novo_autor = Autores(
@@ -22,17 +26,17 @@ class AutorDAO:
             # Confirma a transação
             database.session.commit()
             return True
-        except Exception as e:
+        except SQLAlchemyError as e:
             # Em caso de erro, desfaz a transação
             database.session.rollback()
             print(f"Erro ao adicionar autor: {e}")
             return False
 
     @staticmethod
-    def updateAutor(id, nome, data_nascimento, nacionalidade):
+    def updateAutor(id: int, nome: str, data_nascimento: str, nacionalidade: str):
         try:
             # Busca o autor pelo ID
-            autor = Autores.query.get(id)
+            autor = database.session.get(Autores, id)
             if autor:
                 # Atualiza os campos do autor
                 autor.nome = nome
@@ -42,22 +46,26 @@ class AutorDAO:
                 database.session.commit()
                 return True
             return False
-        except Exception as e:
+        except SQLAlchemyError as e:
             # Em caso de erro, desfaz a transação
             database.session.rollback()
             print(f"Erro ao atualizar autor: {e}")
             return False
 
     @staticmethod
-    def getAutorById(id):
-        # Retorna o autor pelo ID
-        return Autores.query.get(id)
+    def getAutorById(id: int):
+        try:
+            # Retorna o autor pelo ID
+            return database.session.get(Autores, id)
+        except SQLAlchemyError as e:
+            print(f"Erro ao buscar autor pelo ID {id}: {e}")
+            return None
 
     @staticmethod
-    def deleteAutor(id):
+    def deleteAutor(id: int):
         try:
             # Busca o autor pelo ID
-            autor = Autores.query.get(id)
+            autor = database.session.get(Autores, id)
             if autor:
                 # Exclui o autor
                 database.session.delete(autor)
@@ -65,7 +73,7 @@ class AutorDAO:
                 database.session.commit()
                 return True
             return False
-        except Exception as e:
+        except SQLAlchemyError as e:
             # Em caso de erro, desfaz a transação
             database.session.rollback()
             print(f"Erro ao excluir autor: {e}")
