@@ -1,5 +1,5 @@
 from database import database
-from model import Livros, Autores, Categorias
+from model import Livros
 
 
 
@@ -10,12 +10,12 @@ class LivroDAO:
         return Livros.query.all()
 
     @staticmethod
-    def addBook(titulo, autor, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
+    def addBook(titulo, autor_id, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
         try:
             # Cria um novo objeto Livro
             novo_livro = Livros(
                 titulo=titulo,
-                autor=autor,
+                autor_id=autor_id,
                 editora=editora,
                 ano_publicacao=ano_publicacao,
                 genero=genero,
@@ -35,14 +35,14 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def updateBook(id, titulo, autor, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
+    def updateBook(id, titulo, autor_id, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
         try:
             # Busca o livro pelo ID
             livro = Livros.query.get(id)
             if livro:
                 # Atualiza os campos do livro
                 livro.titulo = titulo
-                livro.autor = autor
+                livro.autor_id = autor_id
                 livro.editora = editora
                 livro.ano_publicacao = ano_publicacao
                 livro.genero = genero
@@ -101,7 +101,7 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def searchBooksCustom(titulo=None, autor=None, editora=None, genero=None, ano_inicio=None, isbn=None):
+    def searchBooksCustom(titulo=None, autor_id=None, editora=None, genero=None, ano_inicio=None, isbn=None):
         # Cria a consulta básica para livros
         query = Livros.query
 
@@ -110,8 +110,8 @@ class LivroDAO:
             query = query.filter(Livros.titulo.like(f"%{titulo}%"))
 
         # Filtro por autor, se fornecido
-        if autor:
-            query = query.filter(Livros.autor.like(f"%{autor}%"))
+        if autor_id:
+            query = query.filter(Livros.autor.like(f"%{autor_id}%"))
 
         # Filtro por editora, se fornecido
         if editora:

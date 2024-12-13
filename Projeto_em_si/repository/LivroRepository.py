@@ -14,13 +14,13 @@ class LivroRepository:
         livros_json = [livro.JSonificar() for livro in livros]
         return livros_json
 
-    def addBook(self, titulo, autor, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
+    def addBook(self, titulo, autor_id, editora, ano_publicacao, genero, isbn, quantidade_total, quantidade_disponivel):
         # Adiciona um novo livro no banco de dados.
         try:
             # Chama o método DAO para adicionar o livro
             sucesso = self.livroDAO.addBook(
                 titulo=titulo,
-                autor=autor,
+                autor_id=autor_id,
                 editora=editora,
                 ano_publicacao=ano_publicacao,
                 genero=genero,

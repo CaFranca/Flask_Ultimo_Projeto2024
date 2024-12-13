@@ -16,7 +16,6 @@ def add_book():
             titulo = request.form.get('titulo', '').strip()
             isbn = request.form.get('isbn', '').strip()
             data_publicacaoBruta = request.form.get('publicadoEm', '').strip()
-            numero_paginas = request.form.get('numeroPaginas', '').strip()
             autor_id = request.form.get('autor_id', '').strip()
             categoria_id = request.form.get('categoria_id', '').strip()
             quantidade_total = request.form.get('quantidadeTotal', '').strip()
@@ -31,7 +30,6 @@ def add_book():
             except ValueError:
                 return "Data de publicação inválida. Use o formato YYYY-MM-DD.", 400
 
-            numero_paginas = int(numero_paginas) if numero_paginas.isdigit() else None
             autor_id = int(autor_id) if autor_id.isdigit() else None
             categoria_id = int(categoria_id) if categoria_id.isdigit() else None
             quantidade_total = int(quantidade_total) if quantidade_total.isdigit() else None
@@ -41,8 +39,7 @@ def add_book():
             sucesso = livroRepository.addBook(
                 titulo=titulo,
                 isbn=isbn,
-                data_publicacao=data_publicacao,
-                numero_paginas=numero_paginas,
+                ano_publicacao=data_publicacao,
                 autor_id=autor_id,
                 categoria_id=categoria_id,
                 quantidade_total=quantidade_total,
@@ -108,7 +105,6 @@ def edit_book(id):
         titulo = request.form.get('titulo', '').strip()
         isbn = request.form.get('isbn', '').strip()
         data_publicacaoBruta = request.form.get('data_publicacao', '').strip()
-        numero_paginas = request.form.get('numero_paginas', '').strip()
         autor_id = request.form.get('autor_id', '').strip()
         categoria_id = request.form.get('categoria_id', '').strip()
         quantidade_total = request.form.get('quantidade_total', '').strip()
@@ -125,7 +121,6 @@ def edit_book(id):
             titulo,
             isbn,
             data_publicacao,
-            numero_paginas,
             autor_id,
             categoria_id,
             quantidade_total,
