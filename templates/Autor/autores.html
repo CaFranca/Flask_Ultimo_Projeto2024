@@ -34,7 +34,7 @@
                         <td>
                             <ul>
                                 {% for livro in autor.livros %}
-                                    <li>{{ livro.titulo }} ({{ livro.ano_publicacao }})</li>
+                                    <li>{{ livro.titulo }} {{ livro.data_publicacao }}</li>
                                 {% else %}
                                     <li>Sem livros</li>
                                 {% endfor %}

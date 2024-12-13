@@ -1,12 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from repository import CategoriaRepository
 
-# Criação de um Blueprint para gerenciar rotas relacionadas a categorias
 categoryController = Blueprint("bp_categories", __name__)
-# Instancia o repositório de categorias
+
 categoryRepository = CategoriaRepository()
 
-# Rota para adicionar uma nova categoria ao banco de dados
 @categoryController.route("/add", methods=['GET', 'POST'])
 def add_category():
     if request.method == "POST":
@@ -25,19 +23,17 @@ def add_category():
     
     return render_template('Categorias/CategoriaAdd.html')
 
-# Rota para visualizar todas as categorias
 @categoryController.route('/categorias', methods=['GET'])
 def view_categories():
     nome = request.args.get('nome', '').strip()
     categorias = categoryRepository.searchCategories(nome)
     return render_template('Categorias/categorias.html', categorias=categorias, nome=nome)
 
-# Rota para editar uma categoria existente
 @categoryController.route('/editar/<int:id>', methods=['GET', 'POST'])
 def edit_category(id):
     categoria = categoryRepository.getCategoryById(id)
 
-    if not categoria:
+    if not categoria: #Se categoria não existe
         flash(f"Categoria com ID {id} não encontrada.", "error")
         return redirect(url_for('bp_categories.view_categories'))
 
@@ -58,7 +54,7 @@ def edit_category(id):
     return render_template('Categorias/CategoriaEdit.html', categoria=categoria)
 
 # Rota para excluir uma categoria
-@categoryController.route('/excluir/<int:id>', methods=['POST'])
+@categoryController.route('/excluir/<int:id>', methods=['POST','GET'])
 def delete_category(id):
     mensagem = categoryRepository.deleteCategory(id)
     if "sucesso" in mensagem.lower():

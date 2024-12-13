@@ -23,5 +23,6 @@ class Livros(database.Model):
             "isbn": self.isbn,
             "data_publicacao": self.data_publicacao.isoformat() if self.data_publicacao else None,
             "autor": self.autor.nome if self.autor else "Autor não definido",
-            "categoria": self.categoria.nome if self.categoria else "Categoria não definida"
+            "categoria": self.categoria.nome if self.categoria else "Categoria não definida",
+            "quantidade_total": self.quantidade_total
         }

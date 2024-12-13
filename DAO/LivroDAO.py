@@ -1,6 +1,6 @@
 from model import Livros, Autores, Categorias
 from database import database
-from datetime import datetime
+
 
 class LivroDAO:
     @staticmethod
@@ -12,18 +12,20 @@ class LivroDAO:
             return []
 
     @staticmethod
-    def addBook(titulo, isbn, data_publicacao,  autor_id, categoria_id):
+    def addBook(titulo, isbn, data_publicacao,  autor_id, categoria_id, quantidade_total):
         try:
             novo_livro = Livros(
                 titulo=titulo,
                 isbn=isbn,
                 data_publicacao=data_publicacao,
-
+                quantidade_total = quantidade_total,
                 autor_id=autor_id,
                 categoria_id=categoria_id,
             )
             database.session.add(novo_livro)
+            print("Livro adicionado!")
             database.session.commit()
+            print("Livro commitado!")
             return True
         except Exception as e:
             database.session.rollback()
@@ -31,7 +33,7 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def updateBook(id, titulo, isbn, data_publicacao,  autor_id, categoria_id):
+    def updateBook(id, titulo, isbn, data_publicacao,  autor_id, categoria_id, quantidade_total):
         try:
             livro = Livros.query.get(id)
             if not livro:
@@ -43,6 +45,7 @@ class LivroDAO:
             livro.data_publicacao = data_publicacao
             livro.autor_id = autor_id
             livro.categoria_id = categoria_id
+            livro.quantidade_total = quantidade_total
 
             database.session.commit()
             return True

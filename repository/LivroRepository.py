@@ -12,11 +12,12 @@ class LivroRepository:
         except Exception as e:
             return {"error": f"Erro ao buscar livros: {e}"}
 
-    def addBook(self, titulo, isbn, data_publicacao, autor_id, categoria_id):
+    def addBook(self, titulo, isbn, data_publicacao, autor_id, categoria_id, quantidade_total):
+        print("Adicionando livro...")
         try:
             data_publicacao_formatada = datetime.strptime(data_publicacao, "%Y-%m-%d").date()
             sucesso = self.livroDAO.addBook(
-                titulo, isbn, data_publicacao_formatada,autor_id, categoria_id
+                titulo, isbn, data_publicacao_formatada,autor_id, categoria_id, quantidade_total
             )
             return {"success": sucesso}
         except ValueError as e:
@@ -24,11 +25,11 @@ class LivroRepository:
         except Exception as e:
             return {"error": f"Erro ao adicionar livro: {e}"}
 
-    def updateBook(self, id, titulo, isbn, data_publicacao, autor_id, categoria_id):
+    def updateBook(self, id, titulo, isbn, data_publicacao, autor_id, categoria_id, quantidade_total):
         try:
             data_publicacao_formatada = datetime.strptime(data_publicacao, "%Y-%m-%d").date()
             sucesso = self.livroDAO.updateBook(
-                id, titulo, isbn, data_publicacao_formatada, autor_id, categoria_id
+                id, titulo, isbn, data_publicacao_formatada, autor_id, categoria_id, quantidade_total
             )
             return {"success": sucesso}
         except ValueError as e:

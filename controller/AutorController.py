@@ -67,7 +67,7 @@ def edit_autor(id):
         return redirect(url_for('bp_autores.view_autores'))
 
 # Exclui um autor
-@authorController.route("/autores/excluir/<int:id>", methods=["POST"])
+@authorController.route("/autores/excluir/<int:id>", methods=["POST","GET"])
 def delete_autor(id):
     try:
         mensagem = autor_repo.deleteAutor(id)
