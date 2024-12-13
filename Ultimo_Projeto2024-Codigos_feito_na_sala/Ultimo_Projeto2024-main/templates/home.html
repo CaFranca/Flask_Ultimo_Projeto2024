@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca do Igão - Home</title>
+    <!-- Link para o arquivo de estilos CSS, gerenciado pelo Flask -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <!-- Cabeçalho da página -->
+    <header>
+        <h1>Biblioteca do Igao</h1>
+    </header>
+
+    <main>
+        <!-- Título e descrição do conteúdo principal -->
+        <h2>Bem-vindo à Biblioteca Igao!</h2>
+        <p>Selecione uma das opções abaixo para gerenciar livros, categorias ou autores.</p>
+
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!-- Seção de formulários para gerenciar livros, categorias e autores -->
+        <div class="form-container">
+            <div class="container">
+                <!-- Formulário para adicionar um livro -->
+                <form action="{{ url_for('bp_books.add_book') }}" method="post">
+                    <h1>Adicionar Livro</h1><br>
+
+                    <!-- Campo de entrada para o título do livro -->
+                    <label for="titulo">
+                        <h3>Título:</h3>
+                    </label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required><br>
+
+                    <!-- Seletor de autor do livro -->
+                    <label for="autor_id">
+                        <h3>Autor:</h3>
+                    </label>
+                    <select id="autor_id" name="autor_id" required>
+                        <option value="">Selecione um autor</option>
+                        <option value="0">Desconhecido</option>
+                        {% if autores %}
+                        {% for autor in autores %}
+                        <option value="{{ autor.id }}">{{ autor.nome }}</option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="" disabled>Não há autores cadastrados</option>
+                        {% endif %}
+                    </select><br>
+
+                    <!-- Seletor de categoria do livro -->
+                    <label for="categoria_id">
+                        <h3>Categoria:</h3>
+                    </label>
+                    <select id="categoria_id" name="categoria_id" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="0">Desconhecido</option>
+                        {% if categorias %}
+                        {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="" disabled>Não há categorias cadastradas</option>
+                        {% endif %}
+                    </select><br>
+
+                    <!-- Campos para ISBN, data de publicação e número de páginas -->
+                    <label for="isbn">
+                        <h3>ISBN:</h3>
+                    </label>
+                    <input type="text" id="isbn" name="isbn" placeholder="Digite o ISBN" required><br>
+
+                    <label for="quantidade_total">
+                        <h3>Quantidade Total:</h3>
+                    </label>
+                    <input type="number" id="quantidade_total" name="quantidade_total"
+                        placeholder="Digite o Total disponivel" required><br>
+
+                    <label for="publicadoEm">
+                        <h3>Data de Publicação:</h3>
+                    </label>
+                    <input type="date" id="publicadoEm" name="publicadoEm" required><br>
+
+                    <!-- Botão para enviar o formulário -->
+                    <button type="submit">Adicionar Livro</button>
+                </form>
+
+
+
+                <!-- Link para ver os livros cadastrados -->
+                <button><a href="{{ url_for('bp_books.view_books') }}" class="button">Ver Livros</a></button>
+            </div><br>
+            <!-- Formulário para adicionar uma nova categoria -->
+            <div class="container">
+                <form action="{{ url_for('bp_categories.add_category') }}" method="post">
+                    <h1>Adicionar Categoria</h1><br>
+
+                    <label for="categoria">
+                        <h3>Categoria:</h3>
+                    </label>
+                    <input type="text" id="categoria" name="categoria" placeholder="Digite o nome da categoria"
+                        required><br>
+
+                    <button type="submit">Adicionar Categoria</button>
+                </form>
+                <button><a href="{{ url_for('bp_categories.view_categories') }}" class="button">Ver
+                        Categorias</a></button>
+            </div>
+
+            <br>
+
+            <!-- Link para ver as categorias cadastradas -->
+
+            <div class="container">
+                <!-- Formulário para cadastro de autor -->
+                <form action="{{ url_for('bp_autores.add_autor') }}" method="post">
+                    <h1>Cadastro de Autor</h1><br>
+
+                    <label for="nome">
+                        <h3>Nome do Autor:</h3>
+                    </label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite o nome do autor" required><br>
+
+                    <label for="data_nascimento">
+                        <h3>Data de Nascimento:</h3>
+                    </label>
+                    <input type="date" id="data_nascimento" name="data_nascimento" required><br>
+
+                    <label for="nacionalidade">
+                        <h3>Nacionalidade:</h3>
+                    </label>
+                    <input type="text" id="nacionalidade" name="nacionalidade" placeholder="Digite a nacionalidade"
+                        required><br>
+
+                    <button type="submit">Cadastrar Autor</button>
+                </form>
+                <button><a href="{{ url_for('bp_autores.view_autores') }}" class="button">Ver Autores</a></button>
+            </div>
+
+            <br>
+
+            <!-- Link para ver os autores cadastrados -->
+
+        </div>
+
+    </main>
+
+    <!-- Rodapé da página -->
+    <footer>
+        <p>&copy; 2024 Biblioteca Igao</p>
+    </footer>
+
+</body>
+
+</html>
