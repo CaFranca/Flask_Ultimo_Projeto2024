@@ -151,7 +151,63 @@
 
             <br>
 
-            <!-- Link para ver os autores cadastrados -->
+            <div class="container">
+                <!-- Formulário para adicionar um novo empréstimo -->
+                <form action="{{ url_for('bp_loan.add_emprestimo') }}" method="post">
+                    <h1>Adicionar Empréstimo</h1><br>
+            
+            
+                    <!-- Campo de seleção para o usuário -->
+                    <label for="usuario_id">
+                        <h3>Usuário:</h3>
+                    </label>
+                    <select id="usuario_id" name="usuario_id" required>
+                        <option value="">Selecione um usuário</option>
+                        {% if usuarios %}
+                        {% for usuario in usuarios %}
+                        <option value="{{ usuario.id }}">{{ usuario.nome }}</option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="" disabled>Não há usuários cadastrados</option>
+                        {% endif %}
+                    </select><br>
+            
+                    <!-- Campo de seleção para o livro -->
+                    <label for="livro_id">
+                        <h3>Livro:</h3>
+                    </label>
+                    <select id="livro_id" name="livro_id" required>
+                        <option value="">Selecione um livro</option>
+                        {% if livros %}
+                        {% for livro in livros %}
+                        <option value="{{ livro.id }}">{{ livro.titulo }}</option>
+                        {% endfor %}
+                        {% else %}
+                        <option value="" disabled>Não há livros cadastrados</option>
+                        {% endif %}
+                    </select><br>
+            
+                    <!-- Campo para selecionar a data do empréstimo -->
+                    <label for="data_emprestimo">
+                        <h3>Data do Empréstimo:</h3>
+                    </label>
+                    <input type="date" id="data_emprestimo" name="data_emprestimo" required><br>
+            
+                    <!-- Campo para selecionar a data prevista para devolução -->
+                    <label for="data_devolucao_prevista">
+                        <h3>Data Prevista para Devolução:</h3>
+                    </label>
+                    <input type="date" id="data_devolucao_prevista" name="data_devolucao_prevista" required><br>
+            
+                    <!-- Botão para submeter o formulário -->
+                    <button type="submit">Adicionar Empréstimo</button>
+                </form>
+            
+                <!-- Link para visualizar empréstimos -->
+                <button><a href="{{ url_for('bp_loan.view_emprestimos') }}" class="button">Ver Empréstimos</a></button>
+            </div>
+            
+            
 
         </div>
 
