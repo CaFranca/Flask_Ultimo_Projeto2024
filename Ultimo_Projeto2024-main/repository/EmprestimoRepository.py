@@ -9,7 +9,7 @@ class EmprestimosRepository:
         try:
             sucesso = self.emprestimosDAO.criar_emprestimo(usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
             if sucesso:
-                return redirect(url_for("bp_emprestimos.view_emprestimos"))
+                return redirect(url_for("bp_loan.view_emprestimos"))
             return "Erro ao criar o empréstimo..."
         except Exception as e:
             print(f"Erro no processo de criação de empréstimo: {e}")
@@ -30,7 +30,7 @@ class EmprestimosRepository:
             print(f"Erro ao buscar empréstimo por ID: {e}")
             return None
 
-    def atualizarDevolucao(self, emprestimo_id: int, usuario_id: int, livro_id: int, data_emprestimo: str, data_devolucao_prevista:str):
+    def atualizar_devolucao(self, emprestimo_id: int, usuario_id: int, livro_id: int, data_emprestimo: str, data_devolucao_prevista:str):
         try:
             sucesso = self.emprestimosDAO.atualizar_devolucao(emprestimo_id, usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
             return "Devolução atualizada com sucesso!" if sucesso else "Erro ao atualizar a devolução..."

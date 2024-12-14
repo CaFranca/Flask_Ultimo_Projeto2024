@@ -1,5 +1,6 @@
 from database import database
 from model import Emprestimos, Usuarios,Livros
+from datetime import datetime
 
 class EmprestimosDAO:
     @staticmethod
@@ -10,6 +11,7 @@ class EmprestimosDAO:
             data_emprestimo=data_emprestimo,
             data_devolucao_prevista=data_devolucao_prevista
         )
+        print(emprestimo)
         database.session.add(emprestimo)
         database.session.commit()
         return emprestimo
@@ -25,6 +27,7 @@ class EmprestimosDAO:
     @staticmethod
     def atualizar_devolucao(emprestimo_id, usuario_id, livro_id, data_emprestimo, data_devolucao_prevista):
         emprestimo = Emprestimos.query.get(emprestimo_id)
+        print(emprestimo)
         if emprestimo:
             emprestimo.usuario_id = usuario_id,
             emprestimo.livro_id = livro_id,

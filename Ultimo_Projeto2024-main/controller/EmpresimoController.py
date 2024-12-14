@@ -58,16 +58,20 @@ def edit_emprestimo(emprestimo_id):
             livro_id = request.form.get('livro_id')
             data_emprestimo = datetime.now().replace(second=0, microsecond=0)
             data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
-            data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d')
+            data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d').date()
+            
             if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
                 flash("Todos os campos são obrigatórios.", "error")
+                print("Todos os campos são obrigatórios.", "error")
                 return redirect(url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo_id))
 
-            response = emprestimosRepository.atualizarDevolucao(emprestimo_id,  usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
+            response = emprestimosRepository.atualizar_devolucao(emprestimo_id,usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
             if "Erro" in response:
                 flash(response, "error")
+                print(response, "error")
             else:
                 flash("Devolução atualizada com sucesso!", "success")
+                print("Devolução atualizada com sucesso!", "success")
 
             return redirect(url_for('bp_loan.view_emprestimos'))
 
@@ -77,6 +81,7 @@ def edit_emprestimo(emprestimo_id):
         livros=emprestimosRepository.getLivros()
         if not emprestimo:
             flash("Empréstimo não encontrado.", "error")
+            print("Empréstimo não encontrado.", "error")
             return redirect(url_for('bp_loan.view_emprestimos'))
 
         return render_template("Emprestimo/EmprestimosEdit.html", emprestimo=emprestimo,usuarios=usuarios,livros=livros)
@@ -86,7 +91,7 @@ def edit_emprestimo(emprestimo_id):
         return redirect(url_for('bp_loan.view_emprestimos'))
 
 
-@emprestimoController.route('/excluir/<int:emprestimo_id>', methods=['POST'])
+@emprestimoController.route('/excluir/<int:emprestimo_id>', methods=['GET','POST'])
 def deletar_emprestimo(emprestimo_id):
     try:
         response = emprestimosRepository.deletarEmprestimo(emprestimo_id)
