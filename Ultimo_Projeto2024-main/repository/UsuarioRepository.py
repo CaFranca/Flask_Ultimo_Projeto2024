@@ -9,7 +9,7 @@ class UsuarioRepository:
     def novoUsuario(self, nome, email, senha, tipo, data_criacao):
         try:
             # Converte a data_criacao para um objeto datetime.date
-            data_criacao = datetime.strptime(data_criacao, '%Y-%m-%d').date()
+            
             
             sucesso = self.usuarioDAO.novo_usuario(nome, email, senha, tipo, data_criacao)
             if sucesso:

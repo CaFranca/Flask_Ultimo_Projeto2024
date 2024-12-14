@@ -187,12 +187,6 @@
                         {% endif %}
                     </select><br>
 
-                    <!-- Campo para selecionar a data do empréstimo -->
-                    <label for="data_emprestimo">
-                        <h3>Data do Empréstimo:</h3>
-                    </label>
-                    <input type="date" id="data_emprestimo" name="data_emprestimo" required><br>
-
                     <!-- Campo para selecionar a data prevista para devolução -->
                     <label for="data_devolucao_prevista">
                         <h3>Data Prevista para Devolução:</h3>
@@ -206,7 +200,7 @@
                 <!-- Link para visualizar empréstimos -->
                 <button><a href="{{ url_for('bp_loan.view_emprestimos') }}" class="button">Ver Empréstimos</a></button>
             </div>
-
+<br>
             <div class="container">
                 <!-- Formulário para adicionar um novo usuário -->
                 <form action="{{ url_for('bp_usuario.add_usuario') }}" method="post">

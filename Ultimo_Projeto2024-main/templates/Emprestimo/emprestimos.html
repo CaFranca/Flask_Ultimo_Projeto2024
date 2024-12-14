@@ -33,12 +33,19 @@
                 <button type="submit" class="button" style="background-color: #f44336;">Limpar Filtros</button>
             </form>
         </section>
-
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <h2>Empréstimos Cadastrados</h2>
         <div>
             <a href="{{ url_for('bp_loan.add_emprestimo') }}" class="button">Adicionar Novo Empréstimo</a>
         </div>
-
         <table>
             <thead>
                 <tr>
@@ -56,13 +63,13 @@
                 {% for emprestimo in emprestimos %}
                 <tr>
                     <td>{{ emprestimo.id }}</td>
-                    <td>{{ emprestimo.usuario_id }}</td>
-                    <td>{{ emprestimo.livro_id }}</td>
+                    <td>{{ emprestimo.usuario }}</td>
+                    <td>{{ emprestimo.livro}}</td>
                     <td>{{ emprestimo.data_emprestimo }}</td>
                     <td>{{ emprestimo.data_devolucao_prevista }}</td>
                     <td>{{ emprestimo.data_devolucao_real if emprestimo.data_devolucao_real else "Pendente" }}</td>
                     <td>
-                        <a href="{{ url_for('bp_loan.update_devolucao', emprestimo_id=emprestimo.id) }}" 
+                        <a href="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}" 
                             class="button">Editar</a>
                         <a href="{{ url_for('bp_loan.deletar_emprestimo', emprestimo_id=emprestimo.id) }}" 
                             class="button" style="background-color: #f44336;">Excluir</a>

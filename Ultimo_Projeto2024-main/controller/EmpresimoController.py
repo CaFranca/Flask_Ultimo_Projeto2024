@@ -1,5 +1,6 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
 from repository import EmprestimosRepository
+from datetime import datetime
 
 emprestimoController = Blueprint('bp_loan', __name__)
 emprestimosRepository = EmprestimosRepository()
@@ -11,8 +12,9 @@ def add_emprestimo():
         # Coleta de dados do formulário
         usuario_id = request.form.get('usuario_id')
         livro_id = request.form.get('livro_id')
-        data_emprestimo = request.form.get('data_emprestimo')
-        data_devolucao_prevista = request.form.get('data_devolucao_prevista')
+        data_emprestimo = datetime.now().replace(second=0, microsecond=0)
+        data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
+        data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d')
 
         # Validação dos campos obrigatórios
         if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
@@ -39,9 +41,12 @@ def view_emprestimos():
     try:
         # Busca todos os empréstimos para exibição
         emprestimos = emprestimosRepository.listarTodosJSON()
-        return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos)
+        usuarios=emprestimosRepository.getUsuarios()
+        livros=emprestimosRepository.getLivros()
+        return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos,livros=livros,usuarios=usuarios)
     except Exception as e:
         flash(f"Erro ao carregar os empréstimos: {e}", "error")
+        print(f"Erro ao carregar os empréstimos: {e}", "error")
         return render_template("Emprestimo/emprestimos.html", emprestimos=[])
 
 
@@ -49,13 +54,16 @@ def view_emprestimos():
 def edit_emprestimo(emprestimo_id):
     try:
         if request.method == 'POST':
-            # Atualização de dados do empréstimo
-            data_devolucao_real = request.form.get('data_devolucao_real')
-            if not data_devolucao_real:
-                flash("Data de devolução real é obrigatória.", "error")
+            usuario_id = request.form.get('usuario_id')
+            livro_id = request.form.get('livro_id')
+            data_emprestimo = datetime.now().replace(second=0, microsecond=0)
+            data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
+            data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d')
+            if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
+                flash("Todos os campos são obrigatórios.", "error")
                 return redirect(url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo_id))
 
-            response = emprestimosRepository.atualizarDevolucao(emprestimo_id, data_devolucao_real)
+            response = emprestimosRepository.atualizarDevolucao(emprestimo_id,  usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
             if "Erro" in response:
                 flash(response, "error")
             else:
@@ -65,18 +73,21 @@ def edit_emprestimo(emprestimo_id):
 
         # Recuperação do empréstimo para exibição no formulário
         emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
+        usuarios=emprestimosRepository.getUsuarios()
+        livros=emprestimosRepository.getLivros()
         if not emprestimo:
             flash("Empréstimo não encontrado.", "error")
             return redirect(url_for('bp_loan.view_emprestimos'))
 
-        return render_template("Emprestimo/emprestimo_edit.html", emprestimo=emprestimo)
+        return render_template("Emprestimo/EmprestimosEdit.html", emprestimo=emprestimo,usuarios=usuarios,livros=livros)
     except Exception as e:
         flash(f"Erro ao editar empréstimo: {e}", "error")
+        print(f"Erro ao editar empréstimo: {e}", "error")
         return redirect(url_for('bp_loan.view_emprestimos'))
 
 
 @emprestimoController.route('/excluir/<int:emprestimo_id>', methods=['POST'])
-def delete_emprestimo(emprestimo_id):
+def deletar_emprestimo(emprestimo_id):
     try:
         response = emprestimosRepository.deletarEmprestimo(emprestimo_id)
         if "Erro" in response:

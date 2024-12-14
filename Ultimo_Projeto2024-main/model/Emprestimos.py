@@ -14,8 +14,8 @@ class Emprestimos(database.Model):
     def JSonificar(self):
         return {
             "id": self.id,
-            "usuario_id": self.usuario_id,
-            "livro_id": self.livro_id,
+            "usuario": self.usuario.nome,
+            "livro": self.livro.titulo,
             "data_emprestimo": self.data_emprestimo.isoformat(),
             "data_devolucao_prevista": self.data_devolucao_prevista.isoformat(),
             "data_devolucao_real": self.data_devolucao_real.isoformat() if self.data_devolucao_real else None

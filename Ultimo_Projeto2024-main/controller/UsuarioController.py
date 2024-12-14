@@ -14,11 +14,12 @@ def add_usuario():
         email = request.form.get('email')
         senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
         tipo = request.form.get('tipo')
-        data_criacao = datetime.now()
+        data_criacao = datetime.now().replace(second=0, microsecond=0)
+
 
         if not all([nome, email, senha, tipo, data_criacao]):
             flash("Todos os campos são obrigatórios.", "error")
-            return redirect(url_for('bp_usuario.view_usuarios'))
+            return redirect(url_for('bp_inicio.index'))
 
         response = usuariosRepository.novoUsuario(nome, email, senha, tipo, data_criacao)
         if isinstance(response, str):
@@ -26,10 +27,11 @@ def add_usuario():
         else:
             flash("Usuário criado com sucesso!", "success")
 
-        return redirect(url_for('bp_usuario.view_usuarios'))
+        return redirect(url_for('bp_inicio.index'))
     except Exception as e:
         flash(f"Erro ao criar usuário: {e}", "error")
-        return redirect(url_for('bp_usuario.view_usuarios'))
+        print((f"Erro ao criar usuário: {e}", "error"))
+        return redirect(url_for('bp_inicio.index'))
 
 
 @usuarioController.route('/', methods=['GET'])
@@ -50,9 +52,9 @@ def edit_usuario(usuario_id):
             # Atualização de dados do usuário
             nome = request.form.get('nome')
             email = request.form.get('email')
-            senha = request.form.get('senha')
+            senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
             tipo = request.form.get('tipo')
-            data_criacao = request.form.get('data_criacao')
+            data_criacao = datetime.now().replace(second=0, microsecond=0)
 
             if not all([nome, email, senha, tipo, data_criacao]):
                 flash("Todos os campos são obrigatórios para atualizar.", "error")
@@ -72,7 +74,7 @@ def edit_usuario(usuario_id):
             flash("Usuário não encontrado.", "error")
             return redirect(url_for('bp_usuario.view_usuarios'))
 
-        return render_template("Usuario/usuario_edit.html", usuario=usuario)
+        return render_template("Usuario/UsuarioEdit.html", usuario=usuario)
     except Exception as e:
         flash(f"Erro ao editar usuário: {e}", "error")
         return redirect(url_for('bp_usuario.view_usuarios'))

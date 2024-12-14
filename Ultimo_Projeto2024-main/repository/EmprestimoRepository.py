@@ -30,9 +30,9 @@ class EmprestimosRepository:
             print(f"Erro ao buscar empréstimo por ID: {e}")
             return None
 
-    def atualizarDevolucao(self, emprestimo_id: int, data_devolucao_real: str):
+    def atualizarDevolucao(self, emprestimo_id: int, usuario_id: int, livro_id: int, data_emprestimo: str, data_devolucao_prevista:str):
         try:
-            sucesso = self.emprestimosDAO.atualizar_devolucao(emprestimo_id, data_devolucao_real)
+            sucesso = self.emprestimosDAO.atualizar_devolucao(emprestimo_id, usuario_id, livro_id, data_emprestimo, data_devolucao_prevista)
             return "Devolução atualizada com sucesso!" if sucesso else "Erro ao atualizar a devolução..."
         except Exception as e:
             print(f"Erro no processo de atualização de devolução: {e}")
@@ -61,3 +61,15 @@ class EmprestimosRepository:
         except Exception as e:
             print(f"Erro ao listar empréstimos por livro: {e}")
             return []
+
+    def getUsuarios(self):
+        try:
+            return self.emprestimosDAO.getUsuarios()
+        except Exception as e:
+            return {"error": f"Erro ao buscar autores: {e}"}
+
+    def getLivros(self):
+        try:
+            return self.emprestimosDAO.getLivros()
+        except Exception as e:
+            return {"error": f"Erro ao buscar livros: {e}"}
