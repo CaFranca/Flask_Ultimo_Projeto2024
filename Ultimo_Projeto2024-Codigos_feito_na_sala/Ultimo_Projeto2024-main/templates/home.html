@@ -155,8 +155,8 @@
                 <!-- Formulário para adicionar um novo empréstimo -->
                 <form action="{{ url_for('bp_loan.add_emprestimo') }}" method="post">
                     <h1>Adicionar Empréstimo</h1><br>
-            
-            
+
+
                     <!-- Campo de seleção para o usuário -->
                     <label for="usuario_id">
                         <h3>Usuário:</h3>
@@ -171,7 +171,7 @@
                         <option value="" disabled>Não há usuários cadastrados</option>
                         {% endif %}
                     </select><br>
-            
+
                     <!-- Campo de seleção para o livro -->
                     <label for="livro_id">
                         <h3>Livro:</h3>
@@ -186,28 +186,69 @@
                         <option value="" disabled>Não há livros cadastrados</option>
                         {% endif %}
                     </select><br>
-            
+
                     <!-- Campo para selecionar a data do empréstimo -->
                     <label for="data_emprestimo">
                         <h3>Data do Empréstimo:</h3>
                     </label>
                     <input type="date" id="data_emprestimo" name="data_emprestimo" required><br>
-            
+
                     <!-- Campo para selecionar a data prevista para devolução -->
                     <label for="data_devolucao_prevista">
                         <h3>Data Prevista para Devolução:</h3>
                     </label>
                     <input type="date" id="data_devolucao_prevista" name="data_devolucao_prevista" required><br>
-            
+
                     <!-- Botão para submeter o formulário -->
                     <button type="submit">Adicionar Empréstimo</button>
                 </form>
-            
+
                 <!-- Link para visualizar empréstimos -->
                 <button><a href="{{ url_for('bp_loan.view_emprestimos') }}" class="button">Ver Empréstimos</a></button>
             </div>
-            
-            
+
+            <div class="container">
+                <!-- Formulário para adicionar um novo usuário -->
+                <form action="{{ url_for('bp_usuario.add_usuario') }}" method="post">
+                    <h1>Adicionar Usuário</h1><br>
+
+                    <!-- Campo para o nome do usuário -->
+                    <label for="nome">
+                        <h3>Nome:</h3>
+                    </label>
+                    <input type="text" id="nome" name="nome" placeholder="Digite o nome do usuário" required><br>
+
+                    <!-- Campo para o email do usuário -->
+                    <label for="email">
+                        <h3>Email:</h3>
+                    </label>
+                    <input type="email" id="email" name="email" placeholder="Digite o email do usuário" required><br>
+
+                    <!-- Campo para a senha do usuário -->
+                    <label for="senha">
+                        <h3>Senha:</h3>
+                    </label>
+                    <input type="password" id="senha" name="senha" placeholder="Digite a senha do usuário" required><br>
+
+                    <!-- Campo de seleção para o tipo de usuário -->
+                    <label for="tipo">
+                        <h3>Tipo de Usuário:</h3>
+                    </label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="admin">Admin</option>
+                        <option value="comum">Comum</option>
+                    </select><br>
+
+
+                    <!-- Botão para submeter o formulário -->
+                    <button type="submit">Adicionar Usuário</button>
+                </form>
+
+                <!-- Link para visualizar usuários -->
+                <button><a href="{{ url_for('bp_usuario.view_usuarios') }}" class="button">Ver Usuários</a></button>
+            </div>
+
 
         </div>
 

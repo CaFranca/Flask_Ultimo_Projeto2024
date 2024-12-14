@@ -6,6 +6,7 @@ from controller.LivroController import livroController
 from controller.CategoriasController import categoryController
 from controller.Iniciocontroller import padraoController
 from controller.EmpresimoController import emprestimoController
+from controller.UsuarioController import usuarioController
 
 
 app = Flask(__name__)
@@ -18,6 +19,7 @@ app.register_blueprint(emprestimoController, url_prefix="/loan")
 app.register_blueprint(authorController, url_prefix="/authors")
 app.register_blueprint(livroController, url_prefix="/books")
 app.register_blueprint(categoryController, url_prefix="/categories")
+app.register_blueprint(usuarioController,url_prefix="/users")
 app.register_blueprint(padraoController, url_prefix="/")
 
 if __name__ == "__main__":
