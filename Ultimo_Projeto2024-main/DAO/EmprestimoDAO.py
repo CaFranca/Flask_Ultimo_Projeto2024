@@ -27,12 +27,11 @@ class EmprestimosDAO:
     @staticmethod
     def atualizar_devolucao(emprestimo_id, usuario_id, livro_id, data_emprestimo, data_devolucao_prevista):
         emprestimo = Emprestimos.query.get(emprestimo_id)
-        print(emprestimo)
         if emprestimo:
-            emprestimo.usuario_id = usuario_id,
-            emprestimo.livro_id = livro_id,
-            emprestimo.data_emprestimo = data_emprestimo,
-            emprestimo.data_devolucao_prevista = data_devolucao_prevista,
+            emprestimo.usuario_id = usuario_id
+            emprestimo.livro_id = livro_id
+            emprestimo.data_emprestimo = data_emprestimo
+            emprestimo.data_devolucao_prevista = data_devolucao_prevista
             database.session.commit()
             return emprestimo
         return None

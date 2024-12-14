@@ -59,6 +59,7 @@ def edit_emprestimo(emprestimo_id):
             data_emprestimo = datetime.now().replace(second=0, microsecond=0)
             data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
             data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d').date()
+            print(type(data_devolucao_prevista_bruta),type(data_devolucao_prevista))
             
             if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
                 flash("Todos os campos são obrigatórios.", "error")
