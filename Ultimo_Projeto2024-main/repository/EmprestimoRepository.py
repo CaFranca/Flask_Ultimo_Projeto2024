@@ -73,3 +73,11 @@ class EmprestimosRepository:
             return self.emprestimosDAO.getLivros()
         except Exception as e:
             return {"error": f"Erro ao buscar livros: {e}"}
+        
+    def marcarDevolvido(self, emprestimo_id, data_devolucao_real):
+        try:
+            sucesso = self.emprestimosDAO.atualizar_data_devolucao_real(emprestimo_id, data_devolucao_real)
+            return "Data de devolução atualizada com sucesso!" if sucesso else "Erro ao atualizar a data de devolução..."
+        except Exception as e:
+            print(f"Erro ao marcar devolução: {e}")
+            return "Erro interno ao marcar devolução..."

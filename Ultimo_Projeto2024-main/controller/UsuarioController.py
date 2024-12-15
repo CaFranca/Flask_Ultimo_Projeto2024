@@ -18,7 +18,17 @@ def add_usuario():
             data_criacao = datetime.now().replace(second=0, microsecond=0)
             if not all([nome, email, senha, tipo, data_criacao]):
                 flash("Todos os campos são obrigatórios.", "error")
-                return redirect(url_for('bp_inicio.index'))
+                return redirect(url_for('bp_usuario.add_usuario'))
+            
+            # Verifica se o e-mail ou nome já existem usando o repositório
+            if usuariosRepository.usuario_existe_por_email(email):
+                flash("E-mail já está em uso. Por favor, use outro.", "error")
+                return redirect(url_for('bp_usuario.add_usuario'))
+
+            if usuariosRepository.usuario_existe_por_nome(nome):
+                flash("Nome de usuário já está em uso. Por favor, escolha outro.", "error")
+                return redirect(url_for('bp_usuario.add_usuario'))
+
             response = usuariosRepository.novoUsuario(nome, email, senha, tipo, data_criacao)
             if isinstance(response, str):
                 flash(response, "error")

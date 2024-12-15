@@ -12,7 +12,7 @@ class Multas(database.Model):
     def JSonificar(self):
         return {
             "id": self.id,
-            "usuario_id": self.usuario_id,
+            "usuario": self.usuario,
             "valor": self.valor,
             "data_geracao": self.data_geracao.isoformat(),
             "status": self.status

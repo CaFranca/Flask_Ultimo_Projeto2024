@@ -32,6 +32,7 @@ class EmprestimosDAO:
             emprestimo.livro_id = livro_id
             emprestimo.data_emprestimo = data_emprestimo
             emprestimo.data_devolucao_prevista = data_devolucao_prevista
+            emprestimo.data_devolucao_real=None
             database.session.commit()
             return emprestimo
         return None
@@ -68,3 +69,12 @@ class EmprestimosDAO:
         except Exception as e:
             print(f"Erro ao buscar livros: {e}")
             return []
+
+    @staticmethod
+    def atualizar_data_devolucao_real(emprestimo_id, data_devolucao_real):
+        emprestimo = Emprestimos.query.get(emprestimo_id)
+        if emprestimo:
+            emprestimo.data_devolucao_real = data_devolucao_real
+            database.session.commit()
+            return True
+        return False

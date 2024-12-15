@@ -64,15 +64,25 @@
                 <tr>
                     <td>{{ emprestimo.id }}</td>
                     <td>{{ emprestimo.usuario }}</td>
-                    <td>{{ emprestimo.livro}}</td>
+                    <td>{{ emprestimo.livro }}</td>
                     <td>{{ emprestimo.data_emprestimo }}</td>
                     <td>{{ emprestimo.data_devolucao_prevista }}</td>
-                    <td>{{ emprestimo.data_devolucao_real if emprestimo.data_devolucao_real else "Pendente" }}</td>
                     <td>
-                        <a href="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}" 
+                        {% if emprestimo.data_devolucao_real %}
+                        Devolvido: {{ emprestimo.data_devolucao_real }}
+                        {% else %}
+                        Pendente
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}"
                             class="button">Editar</a>
-                        <a href="{{ url_for('bp_loan.deletar_emprestimo', emprestimo_id=emprestimo.id) }}" 
+                        <a href="{{ url_for('bp_loan.deletar_emprestimo', emprestimo_id=emprestimo.id) }}"
                             class="button" style="background-color: #f44336;">Excluir</a>
+                        {% if not emprestimo.data_devolucao_real %}
+                        <a href="{{ url_for('bp_loan.marcar_devolvido', emprestimo_id=emprestimo.id) }}" class="button"
+                            style="background-color: #4CAF50;">Marcar como Devolvido</a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -83,6 +93,7 @@
                 {% endif %}
             </tbody>
         </table>
+
     </main>
 
     <footer>

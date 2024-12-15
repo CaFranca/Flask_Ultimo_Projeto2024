@@ -65,3 +65,20 @@ class UsuarioRepository:
         except Exception as e:
             print(f"Erro ao listar empréstimos por livro: {e}")
             return []
+
+
+    def usuario_existe_por_email(self, email):
+        try:
+            usuario = self.usuarioDAO.buscar_por_email(email)
+            return usuario
+        except Exception as e:
+            print(f"Erro ao verificar existência do e-mail: {e}")
+            return False
+
+    def usuario_existe_por_nome(self, nome):
+        try:
+            usuario = self.usuarioDAO.buscar_por_nome(nome)
+            return usuario
+        except Exception as e:
+            print(f"Erro ao verificar existência do nome: {e}")
+            return False

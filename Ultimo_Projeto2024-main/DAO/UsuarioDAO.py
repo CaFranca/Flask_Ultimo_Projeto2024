@@ -53,3 +53,9 @@ class UsuarioDAO:
     @staticmethod
     def listar_por_livro(livro_id):
         return Usuarios.query.filter_by(livro_id=livro_id).all()
+
+    def buscar_por_email(self, email):
+        return Usuarios.query.filter_by(email=email).first()
+
+    def buscar_por_nome(self, nome):
+        return Usuarios.query.filter_by(nome=nome).first()

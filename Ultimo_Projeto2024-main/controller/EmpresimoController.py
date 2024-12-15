@@ -125,3 +125,21 @@ def listar_por_livro(livro_id):
     except Exception as e:
         flash(f"Erro ao listar empréstimos por livro: {e}", "error")
         return render_template("Emprestimo/emprestimos_por_livro.html", emprestimos=[])
+
+
+@emprestimoController.route('/marcar_devolvido/<int:emprestimo_id>', methods=['GET'])
+def marcar_devolvido(emprestimo_id):
+    try:
+        # Atualiza a data de devolução real
+        data_devolucao_real = datetime.now().replace(second=0, microsecond=0)
+        response = emprestimosRepository.marcarDevolvido(emprestimo_id, data_devolucao_real)
+
+        if "Erro" in response:
+            flash(response, "error")
+        else:
+            flash("Empréstimo marcado como devolvido com sucesso!", "success")
+
+        return redirect(url_for('bp_loan.view_emprestimos'))
+    except Exception as e:
+        flash(f"Erro ao marcar devolução: {e}", "error")
+        return redirect(url_for('bp_loan.view_emprestimos'))

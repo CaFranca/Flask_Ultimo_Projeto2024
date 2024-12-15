@@ -27,6 +27,11 @@ app.secret_key = '4a466f32ff8af1aad05ac24b5eced2531da40d014c105d9f67caf44c73fd73
 #        print("Bloqueado")
 #        abort(403)
 
+    #if request.endpoint in rotas_privadas:
+    #        if session.get("tipo") != "admin":
+    #            print("Acesso negado - Usuário comum tentando acessar rota restrita")
+    #            abort(403)
+
 #    return
 
 init_database(app)
