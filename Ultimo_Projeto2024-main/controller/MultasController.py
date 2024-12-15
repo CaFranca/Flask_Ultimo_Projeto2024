@@ -15,35 +15,76 @@ def listar_multas():
         print(f"Erro ao carregar as multas: {e}")
         return render_template("Multas/multas.html", multas=[])
 
-@multasController.route('/gerar_multa/<int:emprestimo_id>', methods=['GET', 'POST'])
+
+@multasController.route('/gerar_multa/<int:emprestimo_id>', methods=['GET'])
 def gerar_multa(emprestimo_id):
     try:
-        # Instanciando apenas uma vez o repositório
         emprestimosRepository = EmprestimosRepository()
         emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
         
         if not emprestimo:
             flash("Empréstimo não encontrado.", "error")
+            print("Empréstimo não encontrado.", "error")
             return redirect(url_for('bp_loan.view_emprestimos'))
 
         if emprestimo.data_devolucao_real:
-            # Verifica se houve atraso
+            # Calcula atraso e multa
             if emprestimo.data_devolucao_real > emprestimo.data_devolucao_prevista:
                 dias_atraso = (emprestimo.data_devolucao_real - emprestimo.data_devolucao_prevista).days
-                if dias_atraso > 0:
-                    valor_multa = (dias_atraso // 5) * 10  # Multa de 10 por cada 5 dias de atraso
-                    multasRepository.gerar_multa(emprestimo.usuario_id, valor_multa)
-                    flash(f"Multa gerada: {valor_multa} para o usuário {emprestimo.usuario_id}", "success")
-                else:
-                    flash("O empréstimo foi devolvido no prazo ou antes.", "info")
+                valor_multa = (dias_atraso // 5) * 10  # Multa de 10 por cada 5 dias de atraso
+                atraso = dias_atraso
             else:
-                flash("A devolução ainda não foi realizada.", "warning")
+                valor_multa = 0
+                atraso = 0
+        else:
+            valor_multa = 0
+            atraso = 0
+
+        if atraso == 0:
+            flash("Não é possível gerar a multa, o empréstimo não está atrasado.", "info")
+            return redirect(url_for('bp_loan.view_emprestimos'))
+
+        print(atraso); print(valor_multa)
+        return render_template('Multas/ConfirmarMulta.html', emprestimo=emprestimo, valor_multa=valor_multa, atraso=atraso)
+
+    except Exception as e:
+        flash(f"Erro ao preparar a geração da multa: {e}", "error")
+        print(f"Erro ao preparar a geração da multa: {e}", "error")
+        return redirect(url_for('bp_loan.view_emprestimos'))
+
+@multasController.route('/gerar_multa_confirmada/<int:emprestimo_id>', methods=['POST'])
+def gerar_multa_confirmada(emprestimo_id):
+    try:
+        # Obtemos o empréstimo novamente
+        emprestimosRepository = EmprestimosRepository()
+        emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
+        
+        if not emprestimo:
+            flash("Empréstimo não encontrado.", "error")
+            print("Empréstimo não encontrado.", "error")
+            return redirect(url_for('bp_loan.view_emprestimos'))
+
+        if emprestimo.data_devolucao_real:
+            if emprestimo.data_devolucao_real > emprestimo.data_devolucao_prevista:
+                dias_atraso = (emprestimo.data_devolucao_real - emprestimo.data_devolucao_prevista).days
+                valor_multa = (dias_atraso // 5) * 10
+                multasRepository.gerar_multa(emprestimo.usuario_id, valor_multa)
+                flash(f"Multa de R${valor_multa} gerada para o usuário {emprestimo.usuario_id}.", "success")
+                print(f"Multa de R${valor_multa} gerada para o usuário {emprestimo.usuario_id}.", "success")
+            else:
+                flash("O empréstimo foi devolvido dentro do prazo, não há multa a ser gerada.", "info")
+                print("O empréstimo foi devolvido dentro do prazo, não há multa a ser gerada.", "info")
+        else:
+            flash("A devolução ainda não foi realizada, não é possível gerar multa.", "warning")
+            print("A devolução ainda não foi realizada, não é possível gerar multa.", "warning")
         
         return redirect(url_for('bp_loan.view_emprestimos'))
 
     except Exception as e:
-        flash(f"Erro ao gerar a multa: {e}", "error")
+        flash(f"Erro ao gerar a multa confirmada: {e}", "error")
+        print(f"Erro ao gerar a multa confirmada: {e}", "error")
         return redirect(url_for('bp_loan.view_emprestimos'))
+
 
 @multasController.route('/pagar/<int:multa_id>', methods=['GET'])
 def pagar_multa(multa_id):
