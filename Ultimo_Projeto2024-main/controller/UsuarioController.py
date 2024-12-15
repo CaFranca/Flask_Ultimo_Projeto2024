@@ -7,32 +7,29 @@ usuarioController = Blueprint('bp_usuario', __name__)
 usuariosRepository = UsuarioRepository()
 
 
-@usuarioController.route('/add', methods=['POST'])
+@usuarioController.route('/add', methods=['POST','GET'])
 def add_usuario():
-    try:
-        nome = request.form.get('nome')
-        email = request.form.get('email')
-        senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
-        tipo = request.form.get('tipo')
-        data_criacao = datetime.now().replace(second=0, microsecond=0)
-
-
-        if not all([nome, email, senha, tipo, data_criacao]):
-            flash("Todos os campos são obrigatórios.", "error")
+    if request.method == "POST":
+        try:
+            nome = request.form.get('nome')
+            email = request.form.get('email')
+            senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
+            tipo = request.form.get('tipo')
+            data_criacao = datetime.now().replace(second=0, microsecond=0)
+            if not all([nome, email, senha, tipo, data_criacao]):
+                flash("Todos os campos são obrigatórios.", "error")
+                return redirect(url_for('bp_inicio.index'))
+            response = usuariosRepository.novoUsuario(nome, email, senha, tipo, data_criacao)
+            if isinstance(response, str):
+                flash(response, "error")
+            else:
+                flash("Usuário criado com sucesso!", "success")
             return redirect(url_for('bp_inicio.index'))
-
-        response = usuariosRepository.novoUsuario(nome, email, senha, tipo, data_criacao)
-        if isinstance(response, str):
-            flash(response, "error")
-        else:
-            flash("Usuário criado com sucesso!", "success")
-
-        return redirect(url_for('bp_inicio.index'))
-    except Exception as e:
-        flash(f"Erro ao criar usuário: {e}", "error")
-        print((f"Erro ao criar usuário: {e}", "error"))
-        return redirect(url_for('bp_inicio.index'))
-
+        except Exception as e:
+            flash(f"Erro ao criar usuário: {e}", "error")
+            print((f"Erro ao criar usuário: {e}", "error"))
+            return redirect(url_for('bp_inicio.index'))
+    return render_template('registrar.html')
 
 @usuarioController.route('/', methods=['GET'])
 def view_usuarios():
