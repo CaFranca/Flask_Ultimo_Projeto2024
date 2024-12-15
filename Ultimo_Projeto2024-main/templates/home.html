@@ -33,7 +33,9 @@
         {% endwith %}
         <!-- Seção de formulários para gerenciar livros, categorias e autores -->
 
-       <button> <a href="{{ url_for('bp_inicio.logout') }}"><p>logout</p></a></button>
+        <button> <a href="{{ url_for('bp_inicio.logout') }}">
+                <p>logout</p>
+            </a></button>
         <div class="form-container">
             <div class="container">
                 <!-- Formulário para adicionar um livro -->
@@ -202,7 +204,7 @@
                 <!-- Link para visualizar empréstimos -->
                 <button><a href="{{ url_for('bp_loan.view_emprestimos') }}" class="button">Ver Empréstimos</a></button>
             </div>
-<br>
+            <br>
             <div class="container">
                 <!-- Formulário para adicionar um novo usuário -->
                 <form action="{{ url_for('bp_usuario.add_usuario') }}" method="post">

@@ -55,6 +55,7 @@
                     <th>Data do Empréstimo</th>
                     <th>Data Prevista de Devolução</th>
                     <th>Data Real de Devolução</th>
+                    <th>Valor da Multa</th> <!-- Nova coluna -->
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -74,24 +75,24 @@
                         Pendente
                         {% endif %}
                     </td>
+                    <td>{{ emprestimo.valor_multa or 'Nenhuma' }}</td> <!-- Exibindo valor da multa -->
                     <td>
-                        <a href="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}"
-                            class="button">Editar</a>
-                        <a href="{{ url_for('bp_loan.deletar_emprestimo', emprestimo_id=emprestimo.id) }}"
-                            class="button" style="background-color: #f44336;">Excluir</a>
+                        <a href="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}" class="button">Editar</a>
+                        <a href="{{ url_for('bp_loan.deletar_emprestimo', emprestimo_id=emprestimo.id) }}" class="button" style="background-color: #f44336;">Excluir</a>
+                        
                         {% if not emprestimo.data_devolucao_real %}
-                        <a href="{{ url_for('bp_loan.marcar_devolvido', emprestimo_id=emprestimo.id) }}" class="button"
-                            style="background-color: #4CAF50;">Marcar como Devolvido</a>
+                        <a href="{{ url_for('bp_loan.marcar_devolvido', emprestimo_id=emprestimo.id) }}" class="button" style="background-color: #4CAF50;">Marcar como Devolvido</a>
+                        <a href="{{ url_for('bp_multas.gerar_multa', emprestimo_id=emprestimo.id) }}" class="button" style="background-color: #FFC107;">Adicionar Multa</a> <!-- Botão Adicionar Multa -->
                         {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr>
-                    <td colspan="7">Nenhum empréstimo encontrado.</td>
+                    <td colspan="8">Nenhum empréstimo encontrado.</td>
                 </tr>
                 {% endif %}
-            </tbody>
+            </tbody>            
         </table>
 
     </main>

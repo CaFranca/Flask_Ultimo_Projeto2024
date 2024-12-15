@@ -1,6 +1,5 @@
 from database import database
 from model import Emprestimos, Usuarios,Livros
-from datetime import datetime
 
 class EmprestimosDAO:
     @staticmethod

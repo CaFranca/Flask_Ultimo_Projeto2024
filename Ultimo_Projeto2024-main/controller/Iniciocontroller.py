@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template,request,session,redirect,url_for,flash
 from hashlib import sha256
-from DAO import AutorDAO, LivroDAO, CategoriaDAO,UsuarioDAO
+from DAO import AutorDAO, LivroDAO, CategoriaDAO,UsuarioDAO, EmprestimosDAO
 from repository import UsuarioRepository
 # Criação de um Blueprint chamado "bp_authors" para gerenciar rotas relacionadas a autores
 padraoController = Blueprint("bp_inicio", __name__)
@@ -13,7 +13,8 @@ def sucess():
         categorias=CategoriaDAO.searchCategories()
         autores=AutorDAO.searchAutores()
         usuarios=UsuarioDAO.listar_todos()
-        return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios)
+        emprestimos=EmprestimosDAO.listar_todos()
+        return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
 
 @padraoController.route("/")
 def index():

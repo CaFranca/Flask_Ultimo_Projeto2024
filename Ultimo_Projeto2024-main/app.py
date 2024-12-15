@@ -7,6 +7,7 @@ from controller.CategoriasController import categoryController
 from controller.Iniciocontroller import padraoController
 from controller.EmpresimoController import emprestimoController
 from controller.UsuarioController import usuarioController
+from controller.MultasController import multasController
 
 
 app = Flask(__name__)
@@ -37,6 +38,7 @@ app.secret_key = '4a466f32ff8af1aad05ac24b5eced2531da40d014c105d9f67caf44c73fd73
 init_database(app)
 
 app.register_blueprint(emprestimoController, url_prefix="/loan")
+app.register_blueprint(multasController, url_prefix="/fine")
 app.register_blueprint(authorController, url_prefix="/authors")
 app.register_blueprint(livroController, url_prefix="/books")
 app.register_blueprint(categoryController, url_prefix="/categories")
