@@ -1,0 +1,13 @@
+.formularios-container
+{
+  display: flex;
+  justify-content: space-around; /* Ajusta o espaçamento entre os formulários */
+  gap: 20px; /* Espaçamento entre os formulários */
+}
+.formulario
+{
+  display: flex;
+  flex-direction: column; /* Garantia de que os campos dentro do formulário fiquem em coluna */
+  border: 1px solid #ccc; /* Apenas para visualização */
+  border-radius: 5px;
+}

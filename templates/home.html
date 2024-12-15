@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca do Igão - Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"> <!-- A base é o https://pure-css.github.io/ --> <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}"> <!-- A base é o https://pure-css.github.io/ --> <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
 
 </head>
 
 <body>
-
     <header>
         <h1>Biblioteca do Igao</h1>
     </header>
@@ -20,8 +19,8 @@
         <h2>Bem-vindo à Biblioteca Igao!</h2>
         <p>Selecione uma das opções abaixo para gerenciar livros, categorias ou autores.</p>
 
-        <div class="forms-container">
-            <div>
+        <div class="formularios-container">
+            <div class="formulario">
                 <h1>Adicionar Livro</h1><br>
 
                 <form action="{{ url_for('bp_books.add_book') }}" method="post" class="pure-form pure-form-aligned"> <!-- A classe é só para estilo mesmo. O mesmo vai se repetir abaixo. As classes não têm propósito a não ser estilo.-->
@@ -53,7 +52,6 @@
                         </div>
 
                         <div class="pure-control-group">
-
                             <label for="categoria_id"> <h3>Categoria</h3> </label>
                             <select id="categoria_id" name="categoria_id" class="pure-input-1-4" required>
                                 <option value="">Selecione uma categoria</option>
@@ -65,8 +63,8 @@
                                 {% else %}
                                     <option value="" disabled>Não há categorias cadastradas</option>
                                 {% endif %}
-
-                            </select><br>
+                            </select>
+                            <br>
 
                         </div>
 
@@ -99,14 +97,14 @@
 
             </div>
 
-            <div>
+            <div class="formulario">
                 <h1>Adicionar Categoria</h1><br>
                 <form action="{{ url_for('bp_categories.add_category') }}" method="post" class="pure-form pure-form-aligned">
                     <fieldset>
 
                         <div class="pure-control-group">
                             <label for="categoria"><h3>Categoria</h3></label>
-                            <input type="text" id="categoria" name="categoria" placeholder="Digite o nome da categoria" required>
+                            <input type="text" id="categoria" name="categoria" class="pure-input-1-2" placeholder="Digite o nome da categoria" required>
                         </div>
                     
                         <div class="pure-control-group">
@@ -115,55 +113,59 @@
                         </div>
                     </fieldset>
                 </form>
-                <button><a href="{{ url_for('bp_categories.view_categories') }}" class="button">Ver
-                        Categorias</a></button>
+                <a href="{{ url_for('bp_categories.view_categories') }}" class="button">Ver Categorias</a>
             </div>
 
             <br>
 
-            <!-- Link para ver as categorias cadastradas -->
+            <div class="formulario">
+                <h1>Cadastro de Autor</h1><br>
+                    <form action="{{ url_for('bp_autores.add_autor') }}" method="post" class="pure-form pure-form-aligned">
+                        <fieldset>
 
-            <div class="container">
-                <!-- Formulário para cadastro de autor -->
-                <form action="{{ url_for('bp_autores.add_autor') }}" method="post">
-                    <h1>Cadastro de Autor</h1><br>
+                            <div class="pure-control-group">
+                                <label for="nome"><h3>Nome do Autor</h3></label>
+                                <input type="text" id="nome" name="nome" placeholder="Digite o nome do autor" required><br>
+                            </div>
 
-                    <label for="nome">
-                        <h3>Nome do Autor:</h3>
-                    </label>
-                    <input type="text" id="nome" name="nome" placeholder="Digite o nome do autor" required><br>
+                            <div class="pure-control-group">
+                                <label for="data_nascimento"><h3>Data de Nascimento:</h3></label>
+                                <input type="date" id="data_nascimento" name="data_nascimento" required><br>
+                            </div>
 
-                    <label for="data_nascimento">
-                        <h3>Data de Nascimento:</h3>
-                    </label>
-                    <input type="date" id="data_nascimento" name="data_nascimento" required><br>
+                            <div class="pure-control-group">
+                                <label for="nacionalidade"><h3>Nacionalidade:</h3></label>
+                                <input type="text" id="nacionalidade" name="nacionalidade" placeholder="Digite a nacionalidade"
+                                required><br>
+                            </div>
+                            
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button type="submit" class="pure-button pure-button-primary">Cadastrar Autor</button>
+                            </div>
 
-                    <label for="nacionalidade">
-                        <h3>Nacionalidade:</h3>
-                    </label>
-                    <input type="text" id="nacionalidade" name="nacionalidade" placeholder="Digite a nacionalidade"
-                        required><br>
+                        </fieldset>
+                    </form>
 
-                    <button type="submit">Cadastrar Autor</button>
-                </form>
-                <button><a href="{{ url_for('bp_autores.view_autores') }}" class="button">Ver Autores</a></button>
+                <a href="{{ url_for('bp_autores.view_autores') }}" class="button">Ver Autores</a>
+                
             </div>
-
             <br>
-
-            <!-- Link para ver os autores cadastrados -->
 
         </div> <!-- Aqui terminam os formulários -->
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning" role="alert">
-            {{message}}
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            {{message}}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
+
     </main>
 
     <!-- Rodapé da página -->
@@ -172,5 +174,4 @@
     </footer>
 
 </body>
-
 </html>
