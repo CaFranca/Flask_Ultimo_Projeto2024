@@ -32,8 +32,7 @@ def add_autor():
         
         data_nascimento = datetime.strptime(data_nascimentobruta, '%Y-%m-%d').date()
         mensagem = autorRepository.addAutor(nome, data_nascimento, nacionalidade)
-        flash(mensagem, "success" if "sucesso" in mensagem.lower() else "error")
-        print(mensagem)
+
         return redirect(url_for('bp_inicio.index'))
     except Exception as e:
         flash(f"Erro ao adicionar autor: {e}", "error")

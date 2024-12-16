@@ -21,7 +21,17 @@ class EmprestimosDAO:
 
     @staticmethod
     def buscar_por_id(emprestimo_id):
-        return Emprestimos.query.get(emprestimo_id)
+        try:
+            emprestimo = Emprestimos.query.get(emprestimo_id)
+            if emprestimo:
+                return emprestimo
+            else:
+                print(f"Empréstimo com ID {emprestimo_id} não encontrado.")
+                return None
+        except Exception as e:
+            print(f"Erro ao buscar empréstimo com ID {emprestimo_id}: {e}")
+            return None
+
 
     @staticmethod
     def atualizar_devolucao(emprestimo_id, usuario_id, livro_id, data_emprestimo, data_devolucao_prevista):

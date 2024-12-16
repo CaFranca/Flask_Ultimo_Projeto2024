@@ -1,63 +1,29 @@
-from model import Multas
-from database import database as db
 from datetime import datetime
+from database import database
+from model import Multas
 
 class MultasDAO:
+    def obter_todas_multas(self):
+        return database.session.query(Multas).all()
 
-    @staticmethod
-    def obter_todas_multas():
-        try:
-            # Retorna todas as multas da tabela 'multas'
-            return Multas.query.all()
-        except Exception as e:
-            print(f"Erro ao obter todas as multas: {e}")
-            return []
+    def gerar_multa(self, usuario_id, valor_multa, emprestimo_id):
+        # Gera uma nova multa associada ao empréstimo
+        multa = Multas(usuario_id=usuario_id, valor=valor_multa, data_geracao=datetime.now(), status="pendente", emprestimo_id=emprestimo_id)
+        database.session.add(multa)
+        database.session.commit()
 
-    @staticmethod
-    def gerar_multa(usuario_id, valor_multa):
-        try:
-            # Cria uma nova multa
-            nova_multa = Multas(
-                usuario_id=usuario_id,
-                valor=valor_multa,
-                data_geracao=datetime.now(),
-                status='Pendente'
-            )
-            db.session.add(nova_multa)
-            db.session.commit()
-            return nova_multa
-        except Exception as e:
-            print(f"Erro ao gerar a multa: {e}")
-            db.session.rollback()
-            return None
+    def marcar_como_pago(self, multa_id):
+        multa = database.session.query(Multas).filter(Multas.id == multa_id).first()
+        if multa:
+            multa.status = "paga"
+            database.session.commit()
+            return True
+        return False
 
-    @staticmethod
-    def marcar_como_pago(multa_id):
-        try:
-            # Marca a multa como paga
-            multa = Multas.query.get(multa_id)
-            if multa:
-                multa.status = 'Pago'
-                db.session.commit()
-                return multa
-            else:
-                return None
-        except Exception as e:
-            print(f"Erro ao marcar a multa como paga: {e}")
-            db.session.rollback()
-            return None
-
-    @staticmethod
-    def deletar_multa(multa_id):
-        try:
-            # Deleta a multa
-            multa = Multas.query.get(multa_id)
-            if multa:
-                db.session.delete(multa)
-                db.session.commit()
-                return True
-            return False
-        except Exception as e:
-            print(f"Erro ao deletar a multa: {e}")
-            db.session.rollback()
-            return False
+    def deletar_multa(self, multa_id):
+        multa = database.session.query(Multas).filter(Multas.id == multa_id).first()
+        if multa:
+            database.session.delete(multa)
+            database.session.commit()
+            return True
+        return False

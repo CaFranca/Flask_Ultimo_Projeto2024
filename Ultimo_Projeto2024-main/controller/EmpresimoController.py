@@ -56,7 +56,8 @@ def edit_emprestimo(emprestimo_id):
         if request.method == 'POST':
             usuario_id = request.form.get('usuario_id')
             livro_id = request.form.get('livro_id')
-            data_emprestimo = datetime.now().replace(second=0, microsecond=0)
+            data_emprestimo_bruta = request.form.get('data_emprestimo')
+            data_emprestimo=datetime.strptime(data_emprestimo_bruta, '%Y-%m-%d').date()
             data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
             data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d').date()
             print(type(data_devolucao_prevista_bruta),type(data_devolucao_prevista))

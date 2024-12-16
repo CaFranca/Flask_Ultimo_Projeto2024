@@ -4,6 +4,7 @@ from DAO import EmprestimosDAO
 class EmprestimosRepository:
     def __init__(self):
         self.emprestimosDAO = EmprestimosDAO()
+        
 
     def criarEmprestimo(self, usuario_id: int, livro_id: int, data_emprestimo: str, data_devolucao_prevista: str):
         try:
@@ -23,12 +24,23 @@ class EmprestimosRepository:
             print(f"Erro ao listar todos os empréstimos: {e}")
             return []
 
+
     def buscarEmprestimoPorId(self, emprestimo_id: int):
         try:
-            return self.emprestimosDAO.buscar_por_id(emprestimo_id)
+            emprestimo = self.emprestimosDAO.buscar_por_id(emprestimo_id)
+            
+            if emprestimo:
+                print("Empréstimo encontrado!")
+                print("O ID do Empréstimo é:", emprestimo.id)
+                return emprestimo
+            else:
+                print(f"Empréstimo com ID {emprestimo_id} não encontrado.")
+                return None
         except Exception as e:
             print(f"Erro ao buscar empréstimo por ID: {e}")
             return None
+
+
 
     def atualizar_devolucao(self, emprestimo_id: int, usuario_id: int, livro_id: int, data_emprestimo: str, data_devolucao_prevista:str):
         try:

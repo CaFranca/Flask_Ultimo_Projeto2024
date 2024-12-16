@@ -11,11 +11,13 @@ class Emprestimos(database.Model):
 
     usuario = database.relationship("Usuarios", back_populates="emprestimos")
     livro = database.relationship("Livros", back_populates="emprestimos")
+    multas = database.relationship("Multas", back_populates="emprestimo")
 
     def JSonificar(self):
         return {
             "id": self.id,
             "usuario": self.usuario.nome,
+            "multas": self.multas,
             "livro": self.livro.titulo,
             "data_emprestimo": self.data_emprestimo.isoformat(),
             "data_devolucao_prevista": self.data_devolucao_prevista.isoformat(),
