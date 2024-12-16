@@ -1,14 +1,59 @@
-from flask import Blueprint, render_template
-from DAO import AutorDAO, LivroDAO, CategoriaDAO
-
+from flask import Blueprint, render_template,request,session,redirect,url_for,flash
+from hashlib import sha256
+from DAO import AutorDAO, LivroDAO, CategoriaDAO,UsuarioDAO
+from repository import UsuarioRepository
 # Criação de um Blueprint chamado "bp_authors" para gerenciar rotas relacionadas a autores
 padraoController = Blueprint("bp_inicio", __name__)
-
+usuarioRepository= UsuarioRepository()
 
 # Rota inicial para renderizar uma página específica para autores
+@padraoController.route("/sucess")
+def sucess():
+        livros=LivroDAO.searchBooksCustom()
+        categorias=CategoriaDAO.searchCategories()
+        autores=AutorDAO.searchAutores()
+        usuarios=UsuarioDAO.listar_todos()
+        nome = session['nome']
+        return render_template("home.html", nome=nome, livros=livros, autores=autores, categorias=categorias,usuarios=usuarios)
+
 @padraoController.route("/")
 def index():
-    livros=LivroDAO.searchBooksCustom()
-    categorias=CategoriaDAO.searchCategories()
-    autores=AutorDAO.searchAutores()
-    return render_template("home.html", livros=livros, autores=autores, categorias=categorias)
+    return redirect(url_for('bp_inicio.login'))
+
+@padraoController.route("/login", methods=["GET", "POST"])
+def login():
+    if 'usuario' in session:
+        flash(f"Você já está logado como {session['nome']}!", "info")
+        return redirect(url_for('bp_inicio.sucess'))
+
+    if request.method == "POST":
+        usuario = request.form["usuario"].strip()  # Remove espaços extras
+        senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
+        try:
+            if "@" in usuario:
+                user = usuarioRepository.usuario_existe_por_email(usuario)
+            else:
+                user = usuarioRepository.usuario_existe_por_nome(usuario)
+
+            if user and user.senha == senha:
+                session['usuario'] = user.email
+                session['nome'] = user.nome
+                session['tipo'] = user.tipo
+
+                flash(f"Bem-vindo, {user.nome}!", "success")
+                return redirect(url_for('bp_inicio.sucess')) 
+            else:
+                flash("Usuário ou senha inválidos. Tente novamente.", "error")
+        except Exception as e:
+            flash(f"Ocorreu um erro ao tentar fazer login: {e}", "error")
+
+        return redirect(url_for('bp_inicio.index'))
+
+    return render_template("login.html")
+
+
+@padraoController.route("/logout")
+def logout():
+    session.clear()  # Limpa a sessão
+    flash("Você saiu da sua conta.", "success")
+    return redirect(url_for('bp_inicio.login'))

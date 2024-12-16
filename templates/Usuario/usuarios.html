@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuários</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Lista de Usuários</h1>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        
+        <h2>Usuários Cadastrados</h2>
+
+        <div>
+            <a href="{{ url_for('bp_inicio.index') }}" class="button">Adicionar Novo Usuário</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Tipo</th>
+                    <th>Data de Criação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if usuarios %}
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.tipo }}</td>
+                    <td>{{ usuario.data_criacao }}</td>
+                    <td>
+                        <a href="{{ url_for('bp_usuario.edit_usuario', usuario_id=usuario.id) }}" class="button">Editar</a>
+                        <form action="{{ url_for('bp_usuario.delete_usuario', usuario_id=usuario.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="button" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6">Nenhum usuário encontrado.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </main>
+
+    <footer>
+        <a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a>
+    </footer>
+
+</body>
+
+</html>

@@ -1,13 +1,35 @@
-.formularios-container
+.formularios-container,
+.formularios-esconder.show
 {
   display: flex;
-  justify-content: space-around; /* Ajusta o espaçamento entre os formulários */
+  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
   gap: 20px; /* Espaçamento entre os formulários */
 }
-.formulario
-{
+
+
+.toggle-button {
   display: flex;
-  flex-direction: column; /* Garantia de que os campos dentro do formulário fiquem em coluna */
-  border: 1px solid #ccc; /* Apenas para visualização */
-  border-radius: 5px;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-button span {
+  transform: rotate(0deg); /* Setinha inicial para a direita */
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
+}
+
+.toggle-button.active span {
+  transform: rotate(90deg); /* Rotação da setinha para baixo */
+}
+
+.formularios-esconder {
+  display: none; 
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
+  margin-top: 10px;
+}
+
+.formularios-esconder.show {
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
+  display: flex;
 }

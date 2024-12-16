@@ -21,3 +21,21 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
     margin: 0em; /* Verifique este valor */
     padding: 0em; /* Ajuste conforme necessário */
 }
+
+body
+{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.super-centralizar
+{
+    display: flex; /* Ativa o modo flex */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center; /* Centraliza verticalmente */
+}
+
+.centralizar
+{
+  text-align: center;
+}

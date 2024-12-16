@@ -6,13 +6,13 @@ from datetime import datetime
 authorController = Blueprint('bp_autores', __name__)
 
 # Instancia o repositório de autores
-autor_repo = AutorRepository()
+autorRepository = AutorRepository()
 
 # Exibe todos os autores
 @authorController.route("/autores", methods=["GET"])
 def view_autores():
     try:
-        autores_json = autor_repo.searchAutoresJSON()
+        autores_json = autorRepository.searchAutoresJSON()
         return render_template("Autor/autores.html", autores=autores_json)
     except Exception as e:
         flash(f"Erro ao carregar autores: {e}", "error")
@@ -23,20 +23,21 @@ def view_autores():
 def add_autor():
     try:
         nome = request.form.get("nome")
-        data_nascimentoBruta = request.form.get("data_nascimento")
+        data_nascimentobruta = request.form.get("data_nascimento")
         nacionalidade = request.form.get("nacionalidade")
 
-        if not nome or not data_nascimentoBruta or not nacionalidade:
+        if not nome or not data_nascimentobruta or not nacionalidade:
             flash("Todos os campos são obrigatórios.", "error")
-            return redirect(url_for('bp_autores.view_autores'))
+            return redirect(url_for('bp_inicio.index'))
         
-        data_nascimento = datetime.strptime(data_nascimentoBruta, '%Y-%m-%d').date()
-        mensagem = autor_repo.addAutor(nome, data_nascimento, nacionalidade)
+        data_nascimento = datetime.strptime(data_nascimentobruta, '%Y-%m-%d').date()
+        mensagem = autorRepository.addAutor(nome, data_nascimento, nacionalidade)
         flash(mensagem, "success" if "sucesso" in mensagem.lower() else "error")
-        return redirect(url_for('bp_autores.view_autores'))
+        print(mensagem)
+        return redirect(url_for('bp_inicio.index'))
     except Exception as e:
         flash(f"Erro ao adicionar autor: {e}", "error")
-        return redirect(url_for('bp_autores.view_autores'))
+        return redirect(url_for('bp_inicio.index'))
 
 # Edita um autor existente
 @authorController.route("/autores/editar/<int:id>", methods=["GET", "POST"])
@@ -52,11 +53,11 @@ def edit_autor(id):
                 return redirect(url_for('bp_autores.edit_autor', id=id))
 
             data_nascimento = datetime.strptime(data_nascimentoBruta, '%Y-%m-%d').date()
-            mensagem = autor_repo.updateAutor(id, nome, data_nascimento, nacionalidade)
+            mensagem = autorRepository.updateAutor(id, nome, data_nascimento, nacionalidade)
             flash(mensagem, "success" if "sucesso" in mensagem.lower() else "error")
             return redirect(url_for('bp_autores.view_autores'))
         
-        autor = autor_repo.getAutorById(id)
+        autor = autorRepository.getAutorById(id)
         if not autor:
             flash(f"Autor com ID {id} não encontrado.", "error")
             return redirect(url_for('bp_autores.view_autores'))
@@ -70,7 +71,7 @@ def edit_autor(id):
 @authorController.route("/autores/excluir/<int:id>", methods=["POST","GET"])
 def delete_autor(id):
     try:
-        mensagem = autor_repo.deleteAutor(id)
+        mensagem = autorRepository.deleteAutor(id)
         flash(mensagem, "success" if "sucesso" in mensagem.lower() else "error")
     except Exception as e:
         flash(f"Erro ao excluir autor: {e}", "error")
