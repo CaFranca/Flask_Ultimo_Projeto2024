@@ -1,4 +1,4 @@
-from flask import Blueprint, request, redirect, url_for, render_template, flash
+from flask import Blueprint, request, redirect, url_for, render_template, flash, session
 from repository import UsuarioRepository
 from hashlib import sha256
 from datetime import datetime
@@ -17,7 +17,7 @@ def add_usuario():
             senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
             tipo = request.form.get('tipo')
             
-            if referer and "users/add" in referer: #Verifica se a pessoa está vindo do cadastro comum. Caso sim, o tipo do usuário deve ser comum.
+            if referer and "users/add" in referer or session.get("tipo") != "admin": #Verifica se a pessoa está vindo do cadastro comum. Caso sim, o tipo do usuário deve ser comum. Também verifica se o usuário é admin, pois somente admins devem criar novos admins (caso contrário, toda a segurança do sistema iria para o ralo)
                 tipo = "Comum"
                 
             data_criacao = datetime.now().replace(second=0, microsecond=0)
