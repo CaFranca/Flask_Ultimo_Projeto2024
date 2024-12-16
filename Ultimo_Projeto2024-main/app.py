@@ -47,15 +47,18 @@ app.register_blueprint(padraoController, url_prefix="/")
 
 @app.errorhandler(404)
 def page_not_found(e):
+    print(e)
     flash('A url da pagina parece estar incorreta, tente voltar para a pagina de login','warning')
     return render_template('Erros/404.html'), 404
 
 @app.errorhandler(403)
 def acesso_negado(e):
+    print(e)
     return render_template('Erros/403.html'), 403
 
 @app.errorhandler(401)
 def nao_autorizado(e):
+    print(e)
     return render_template('Erros/401.html'), 401
 
 
