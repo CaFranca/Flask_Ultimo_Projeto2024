@@ -1,5 +1,5 @@
 from database import database
-from model import Emprestimos, Usuarios,Livros
+from model import Emprestimos, Usuarios,Livros,Multas
 
 class EmprestimosDAO:
     @staticmethod
@@ -48,12 +48,27 @@ class EmprestimosDAO:
 
     @staticmethod
     def deletar_emprestimo(emprestimo_id):
-        emprestimo = Emprestimos.query.get(emprestimo_id)
-        if emprestimo:
-            database.session.delete(emprestimo)
-            database.session.commit()
-            return True
-        return False
+        try:
+            # Buscar o empréstimo
+            emprestimo = Emprestimos.query.get(emprestimo_id)
+            
+            if emprestimo:
+                # Buscar a multa associada ao empréstimo
+                multa = Multas.query.filter(Multas.emprestimo_id == emprestimo_id).first()
+                
+                # Se houver multa associada, exclui a multa
+                if multa:
+                    database.session.delete(multa)
+                
+                # Exclui o empréstimo
+                database.session.delete(emprestimo)
+                database.session.commit()
+                return True
+            return False
+        except Exception as e:
+            # Em caso de erro, faz o rollback e retorna False
+            database.session.rollback()
+            return f"Erro ao excluir o empréstimo e a multa: {str(e)}"
 
     @staticmethod
     def listar_por_usuario(usuario_id):

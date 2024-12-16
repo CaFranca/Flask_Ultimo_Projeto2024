@@ -1,5 +1,7 @@
 from database import database
-from model import Emprestimos, Usuarios,Livros
+from model import Emprestimos, Usuarios,Livros,Multas
+from DAO import LivroDAO
+livroDAO=LivroDAO()
 
 class EmprestimosDAO:
     @staticmethod
@@ -10,9 +12,14 @@ class EmprestimosDAO:
             data_emprestimo=data_emprestimo,
             data_devolucao_prevista=data_devolucao_prevista
         )
-        print(emprestimo)
         database.session.add(emprestimo)
         database.session.commit()
+
+        # Atualiza a quantidade disponível do livro após o empréstimo
+        livro = Livros.query.get(livro_id)
+        if livro:
+            livroDAO.atualizar_quantidade_disponivel(livro_id)
+
         return emprestimo
 
     @staticmethod
@@ -48,12 +55,27 @@ class EmprestimosDAO:
 
     @staticmethod
     def deletar_emprestimo(emprestimo_id):
-        emprestimo = Emprestimos.query.get(emprestimo_id)
-        if emprestimo:
-            database.session.delete(emprestimo)
-            database.session.commit()
-            return True
-        return False
+        try:
+            # Buscar o empréstimo
+            emprestimo = Emprestimos.query.get(emprestimo_id)
+            
+            if emprestimo:
+                # Buscar a multa associada ao empréstimo
+                multa = Multas.query.filter(Multas.emprestimo_id == emprestimo_id).first()
+                
+                # Se houver multa associada, exclui a multa
+                if multa:
+                    database.session.delete(multa)
+                
+                # Exclui o empréstimo
+                database.session.delete(emprestimo)
+                database.session.commit()
+                return True
+            return False
+        except Exception as e:
+            # Em caso de erro, faz o rollback e retorna False
+            database.session.rollback()
+            return f"Erro ao excluir o empréstimo e a multa: {str(e)}"
 
     @staticmethod
     def listar_por_usuario(usuario_id):
@@ -85,5 +107,11 @@ class EmprestimosDAO:
         if emprestimo:
             emprestimo.data_devolucao_real = data_devolucao_real
             database.session.commit()
+
+            # Atualiza a quantidade disponível do livro após a devolução
+            livro = Livros.query.get(emprestimo.livro_id)
+            if livro:
+                livro.atualizar_quantidade_disponivel()
+
             return True
         return False

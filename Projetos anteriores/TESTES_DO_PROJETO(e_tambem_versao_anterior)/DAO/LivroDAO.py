@@ -1,4 +1,4 @@
-from model import Livros, Autores, Categorias
+from model import Livros, Autores, Categorias,Emprestimos
 from database import database
 
 
@@ -112,3 +112,10 @@ class LivroDAO:
         except Exception as e:
             print(f"Erro ao realizar consulta personalizada: {e}")
             return []
+
+    def atualizar_quantidade_disponivel(self):
+        # Calcula a quantidade de livros disponíveis
+        quantidade_emprestados = len(Emprestimos.query.filter_by(livro_id=self.id, data_devolucao_real=None).all())
+        self.quantidade_disponivel = self.quantidade_total - quantidade_emprestados
+        database.session.commit()
+

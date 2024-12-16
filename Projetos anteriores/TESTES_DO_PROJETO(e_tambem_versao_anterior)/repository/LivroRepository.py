@@ -68,3 +68,4 @@ class LivroRepository:
             return [livro.JSonificar() for livro in livros]
         except Exception as e:
             return {"error": f"Erro ao realizar consulta personalizada: {e}"}
+

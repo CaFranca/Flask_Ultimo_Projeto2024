@@ -7,10 +7,10 @@ class Multas(database.Model):
     valor = database.Column(database.Float, nullable=False)
     data_geracao = database.Column(database.DateTime, nullable=False)
     status = database.Column(database.String(20), nullable=False)
-    emprestimo_id = database.Column(database.Integer, database.ForeignKey("emprestimos.id"), nullable=False)  # Chave estrangeira
+    emprestimo_id = database.Column(database.Integer, database.ForeignKey("emprestimos.id"), nullable=False)  
 
     usuario = database.relationship("Usuarios", back_populates="multas")
-    emprestimo = database.relationship("Emprestimos", back_populates="multas", foreign_keys=[emprestimo_id])  # Indica a chave estrangeira
+    emprestimo = database.relationship("Emprestimos", back_populates="multas", foreign_keys=[emprestimo_id])  
 
     def JSonificar(self):
         return {

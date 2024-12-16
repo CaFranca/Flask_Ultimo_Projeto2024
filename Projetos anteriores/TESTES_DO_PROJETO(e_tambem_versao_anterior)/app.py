@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request, abort, session
+from flask import Flask,render_template,flash,request,abort,session
 # Importa a configuração do banco de dados e as funções para inicialização
 from database import init_database
 from controller.AutorController import authorController
@@ -9,81 +9,31 @@ from controller.EmpresimoController import emprestimoController
 from controller.UsuarioController import usuarioController
 from controller.MultasController import multasController
 
+
 app = Flask(__name__)
 app.secret_key = '4a466f32ff8af1aad05ac24b5eced2531da40d014c105d9f67caf44c73fd73fc'
 
-rotas_privadas_administrativas = ['static',
-    'bp_autores.add_autor',
-    'bp_autores.edit_autor',
-    'bp_autores.delete_autor',
-    'bp_categories.add_category',
-    'bp_categories.edit_category',
-    'bp_categories.delete_category',
-    'bp_loan.add_emprestimo',
-    'bp_loan.edit_emprestimo',
-    'bp_loan.deletar_emprestimo',
-    'bp_multas.gerar_multa',
-    'bp_multas.excluir_multa',
-    'bp_usuario.edit_usuario',
-    'bp_usuario.delete_usuario'
-]
+#rotas_publicas=['static','blueprint_cool.index','blueprint_cool.login']
+#rotas_privadas=['static','blueprint_cool.livros', 'blueprint_cool.logout', 'blueprint_cool.limpar', 'blueprint_cool.adicionar_livro']
 
-rotas_publicas = ['static',
-    'bp_autores.view_autores',
-    'bp_autores.index',
-    'bp_categories.view_categories',
-    'bp_loan.listar_por_livro',
-    'bp_loan.listar_por_usuario',
-    'bp_inicio.index',
-    'bp_inicio.login',
-    'bp_books.books_home',
-    'bp_multas.listar_multas',
-    'bp_usuario.add_usuario'
-]
+#@app.before_request
+#def verificaSessao():
+    
+#    if request.endpoint not in rotas_privadas and request.endpoint not in rotas_publicas:
+#        abort(404)
+#    if request.endpoint in rotas_publicas:
+#        return
+    
+#    elif "usuario" not in session:
+#        print("Bloqueado")
+#        abort(403)
 
-rotas_privadas = ['static',
-    'bp_autores.add_autor',
-    'bp_autores.edit_autor',
-    'bp_autores.delete_autor',
-    'bp_categories.add_category',
-    'bp_categories.edit_category',
-    'bp_categories.delete_category',
-    'bp_loan.add_emprestimo',
-    'bp_loan.marcar_devolvido',
-    'bp_loan.edit_emprestimo',
-    'bp_loan.deletar_emprestimo',
-    'bp_inicio.sucess',
-    'bp_inicio.logout',
-    'bp_books.view_books',
-    'bp_books.add_book',
-    'bp_books.edit_book',
-    'bp_books.delete_book',
-    'bp_multas.listar_multas',
-    'bp_multas.gerar_multa',
-    'bp_multas.pagar_multa',
-    'bp_multas.excluir_multa',
-    'bp_usuario.view_usuarios',
-    'bp_usuario.edit_usuario',
-    'bp_usuario.delete_usuario'
-]
+    #if request.endpoint in rotas_privadas:
+    #        if session.get("tipo") != "admin":
+    #            print("Acesso negado - Usuário comum tentando acessar rota restrita")
+    #            abort(403)
 
-@app.before_request
-def verificaSessao():
-
-    if request.endpoint not in rotas_publicas:
-        if "usuario" not in session:
-            print("Bloqueado - Usuário não autenticado")
-            flash("Bloqueado - Usuário não autenticado")
-            abort(403)
-
-        if request.endpoint in rotas_privadas_administrativas:
-            if session.get("tipo") != "admin":
-                print("Acesso negado - Usuário comum tentando acessar rota administrativa")
-                flash("Acesso negado - Usuário comum tentando acessar rota administrativa")
-                abort(403) 
-
-    return
-
+#    return
 
 init_database(app)
 
@@ -98,7 +48,7 @@ app.register_blueprint(padraoController, url_prefix="/")
 @app.errorhandler(404)
 def page_not_found(e):
     print(e)
-    flash('A url da pagina parece estar incorreta, tente voltar para a pagina de login', 'warning')
+    flash('A url da pagina parece estar incorreta, tente voltar para a pagina de login','warning')
     return render_template('Erros/404.html'), 404
 
 @app.errorhandler(403)
@@ -112,6 +62,7 @@ def nao_autorizado(e):
     return render_template('Erros/401.html'), 401
 
 
+# Manipulador de erros genéricos
 @app.errorhandler(Exception)
 def handle_generic_error(e):
     print(e)
