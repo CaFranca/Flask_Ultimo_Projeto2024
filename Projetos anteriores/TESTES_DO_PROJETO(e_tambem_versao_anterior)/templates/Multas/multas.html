@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Empréstimos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Gerenciamento de Empréstimos</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Buscar Empréstimos</h2>
+            <form method="GET" action="{{ url_for('bp_loan.view_emprestimos') }}">
+                <div class="form-group">
+                    <label for="usuario_id">Usuário</label>
+                    <input type="text" id="usuario_id" name="usuario_id" placeholder="ID do Usuário"
+                        value="{{ request.args.get('usuario_id', '') }}">
+                </div>
+                <div class="form-group">
+                    <label for="livro_id">Livro</label>
+                    <input type="text" id="livro_id" name="livro_id" placeholder="ID do Livro"
+                        value="{{ request.args.get('livro_id', '') }}">
+                </div>
+                <button type="submit">Buscar</button>
+            </form>
+            <form method="GET" action="{{ url_for('bp_loan.view_emprestimos') }}">
+                <button type="submit" class="button" style="background-color: #f44336;">Limpar Filtros</button>
+            </form>
+        </section>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-warning" role="alert">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <h2>Empréstimos Cadastrados</h2>
+        <div>
+            <a href="{{ url_for('bp_loan.add_emprestimo') }}" class="button">Adicionar Novo Empréstimo</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuário</th>
+                    <th>Valor</th>
+                    <th>Data de Geração</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for multa in multas %}
+                <tr>
+                    <td>{{ multa.id }}</td>
+                    <td>{{ multa.usuario_id }}</td>
+                    <td>{{ multa.valor }}</td>
+                    <td>{{ multa.data_geracao }}</td>
+                    <td>{{ multa.status }}</td>
+                    <td>
+                        {% if multa.status == 'pendente' %}
+                            <a href="{{ url_for('bp_multas.pagar_multa', multa_id=multa.id) }}" class="button" style="background-color: #00bd48">Pagar</a>
+                        {% endif %}
+                        <a href="{{ url_for('bp_multas.excluir_multa', multa_id=multa.id) }}" class="button" style="background-color: #f44336;">Excluir</a>
+                    </td>                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+
+    </main>
+
+    <footer>
+        <a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a>
+    </footer>
+</body>
+
+</html>

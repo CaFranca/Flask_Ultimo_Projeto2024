@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Pagamento</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header>
+        <h1>Confirmar Pagamento da Multa</h1>
+    </header>
+
+    <main>
+        <section>
+            <p>Tem certeza de que deseja marcar a multa abaixo como <strong>PAGA</strong>?</p>
+            <ul>
+                <li><strong>ID da Multa:</strong> {{ multa.id }}</li>
+                <li><strong>Usuário:</strong> {{ multa.usuario.nome }}</li>
+                <li><strong>Valor:</strong> R$ {{ multa.valor }}</li>
+                <li><strong>Data de Geração:</strong> {{ multa.data_geracao }}</li>
+                <li><strong>Status:</strong> {{ multa.status }}</li>
+            </ul>
+
+            <form method="POST" action="{{ url_for('bp_multas.pagar_multa', multa_id=multa.id) }}">
+                <button type="submit" class="button" style="background-color: #4CAF50;">Confirmar Pagamento</button>
+                <a href="{{ url_for('bp_multas.listar_multas') }}" class="button" style="background-color: #f44336;">Cancelar</a>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a>
+    </footer>
+</body>
+
+</html>
