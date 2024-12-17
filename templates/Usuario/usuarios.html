@@ -5,33 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Usuários</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}"> 
 </head>
 
 <body>
 
     <header>
-        <h1>Lista de Usuários</h1>
+        <h1 class="centralizar">Lista de Usuários</h1>
     </header>
 
     <main>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning" role="alert">
-            {{ message }}
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{message}}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
         
-        <h2>Usuários Cadastrados</h2>
+        <h2>Usuários Cadastrados 📋</h2>
 
-        <div>
-            <a href="{{ url_for('bp_inicio.index') }}" class="button">Adicionar Novo Usuário</a>
-        </div>
 
-        <table>
+        <table class="pure-table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -52,9 +53,15 @@
                     <td>{{ usuario.tipo }}</td>
                     <td>{{ usuario.data_criacao }}</td>
                     <td>
-                        <a href="{{ url_for('bp_usuario.edit_usuario', usuario_id=usuario.id) }}" class="button">Editar</a>
+                        <button  class="imagem-botao" style="display:inline;">
+                            <a href="{{ url_for('bp_usuario.edit_usuario', usuario_id=usuario.id) }}"><img src="/static/img/pencil.svg" alt="Excluir"></a>
+                        </button>
                         <form action="{{ url_for('bp_usuario.delete_usuario', usuario_id=usuario.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="button" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</button>
+                            
+                                <button type="submit" style="cursor: pointer;" class="imagem-botao" onclick="return confirm('Tem certeza que deseja excluir este usuário?')"> 
+                                    <img style="cursor: pointer;;" src="/static/img/delete.svg" alt="Excluir">
+                                </button>
+                            
                         </form>
                     </td>
                 </tr>
@@ -66,11 +73,15 @@
                 {% endif %}
             </tbody>
         </table>
+        <br>
 
     </main>
 
     <footer>
-        <a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a>
+
+        <button class="pure-button pure-button-primary"><a href="{{ url_for('bp_inicio.index') }}">Adicionar Novo Usuário</a></button><br><br>
+
+        <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a></button>
     </footer>
 
 </body>

@@ -1,43 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Categoria</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Biblioteca - Editar Categoria</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}">
 </head>
 
 <body>
-
-    <header>
-        <h1>Editar Categoria</h1>
-    </header>
-
     <main>
-        <h2>Alterar os dados da categoria</h2>
+        <h1>Editar Categoria 🔖</h1>
 
-        <!-- Formulário para editar a categoria -->
-        <form action="{{ url_for('bp_categories.edit_category', id=categoria.id) }}" method="POST">
-            <div>
-                <label for="categoria">Nome da Categoria:</label>
-                <input type="text" id="categoria" name="categoria" value="{{ categoria.nome }}" required>
-            </div>
-            <div>
-                <button type="submit" class="button">Salvar Alterações</button>
-            </div>
-        </form>
+        <!-- Mensagens Flash -->
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
 
-        <!-- Botão para voltar à lista de categorias -->
-        <div>
-            <a href="{{ url_for('bp_categories.view_categories') }}" class="button">Voltar à Lista de Categorias</a>
+        <div class="super-centralizar">
+            <div class="formulario">
+                <h1 class="centralizar">Formulário de Edição ✏️</h1>
+                <form action="{{ url_for('bp_categories.edit_category', id=categoria.id) }}" method="POST" class="pure-form pure-form-aligned">
+                    <fieldset>
+                        <div class="pure-control-group">
+                            <label for="categoria"> <h3>Nome da Categoria</h3></label>
+                            <input type="text" id="categoria" name="categoria" value="{{ categoria.nome }}" required>
+                        </div>
+
+                        <div class="pure-control-group">
+                            <label></label>
+                            <button type="submit" class="pure-button pure-button-primary pure-input-1-2">Atualizar Categoria</button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <p><button class="pure-button"><a href="{{ url_for('bp_categories.view_categories') }}">Voltar para a lista de categorias</a></button></p>
+            </div>
         </div>
     </main>
-
-    <footer>
-        <p>&copy; 2024 Sistema de Gestão de Categorias</p>
-    </footer>
-
 </body>
 
 </html>

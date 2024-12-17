@@ -1,65 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Autor</title>
-    <!-- Referência ao CSS da aplicação -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Biblioteca - Editar Autor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}">
 </head>
 
 <body>
+    <main>
+        <h1>Editar Autor 🔖</h1>
 
-    <!-- Cabeçalho -->
-    <header>
-        <h1>Biblioteca do Igao</h1>
-    </header>
+        <!-- Mensagens Flash -->
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
 
-    <!-- Container principal da página -->
-    <div class="container">
-        <h2>Editar Autor</h2>
+        <div class="super-centralizar">
+            <div class="formulario">
+                <h1 class="centralizar">Formulário de Edição ✏️</h1>
+                <form action="{{ url_for('bp_autores.edit_autor', id=autor.id) }}" method="POST" class="pure-form pure-form-aligned">
+                    <fieldset>
+                        <!-- Campo de entrada para o nome do autor -->
+                        <div class="pure-control-group">
+                            <label for="nome"> <h3>Nome</h3></label>
+                            <input type="text" id="nome" name="nome" value="{{ autor.nome }}" required>
+                        </div>
 
-        <!-- Formulário para editar autor -->
-        <form action="{{ url_for('bp_autores.edit_autor', id=autor.id) }}" method="POST">
-            <div class="form-container">
+                        <!-- Campo de entrada para a data de nascimento -->
+                        <div class="pure-control-group">
+                            <label for="data_nascimento"> <h3>Data de Nascimento</h3></label>
+                            <input type="date" id="data_nascimento" name="data_nascimento" value="{{ autor.data_nascimento }}" required>
+                        </div>
 
-                <!-- Campo de entrada para o nome do autor -->
-                <div class="form-group">
-                    <label for="nome"><h3>Nome</h3></label>
-                    <input type="text" id="nome" name="nome" class="form-control" value="{{ autor.nome }}" required>
-                </div>
+                        <!-- Campo de entrada para a nacionalidade -->
+                        <div class="pure-control-group">
+                            <label for="nacionalidade"> <h3>Nacionalidade</h3></label>
+                            <input type="text" id="nacionalidade" name="nacionalidade" value="{{ autor.nacionalidade }}" required>
+                        </div>
 
-                <!-- Campo de entrada para a data de nascimento -->
-                <div class="form-group">
-                    <label for="data_nascimento"><h3>Data de Nascimento</h3></label>
-                    <input type="date" id="data_nascimento" name="data_nascimento" class="form-control" value="{{ autor.data_nascimento }}" required>
-                </div>
+                        <!-- Botão de submissão -->
+                        <div class="pure-control-group">
+                            <label></label>
+                            <button type="submit" class="pure-button pure-button-primary pure-input-1-2">Salvar Alterações</button>
+                        </div>
+                    </fieldset>
+                </form>
 
-                <!-- Campo de entrada para a nacionalidade -->
-                <div class="form-group">
-                    <label for="nacionalidade"><h3>Nacionalidade</h3></label>
-                    <input type="text" id="nacionalidade" name="nacionalidade" class="form-control" value="{{ autor.nacionalidade }}" required>
-                </div>
-
-                <!-- Botão de submissão -->
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-                </div>
-
+                <p><button class="pure-button"><a href="{{ url_for('bp_autores.view_autores') }}">Voltar para a lista de autores</a></button></p>
             </div>
-            <button><a href="{{ url_for('bp_autores.view_autores') }}" class="btn btn-secondary">Voltar para a lista de autores</a></button>
-        </form>
-
-        <!-- Link para voltar para a lista de autores -->
-        
-    </div>
-
-    <!-- Rodapé -->
-    <footer>
-        <p>&copy; 2024 Biblioteca Igao. Todos os direitos reservados.</p>
-    </footer>
-
+        </div>
+    </main>
 </body>
 
 </html>

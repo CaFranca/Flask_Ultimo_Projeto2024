@@ -39,3 +39,86 @@ body
 {
   text-align: center;
 }
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.success {
+    background: rgb(28, 184, 65);
+    /* this is a green */
+}
+
+.error {
+    background: rgb(202, 60, 60);
+    /* this is a maroon */
+}
+
+.warning {
+    background: rgb(223, 117, 20);
+    /* this is an orange */
+}
+
+.secondary {
+    background: rgb(66, 184, 221);
+    /* this is a light blue */
+}
+
+/* Código para a sidenav. Melhor colocar na base, pois mais de uma página pode vir a usar */
+/* Código para a sidenav. Créditos: w3cschools */
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }
+
+  .imagem-botao{
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .imagem-botao img{
+    display: block; /* to remove extra space below image */
+    width: 24px; 
+    height: 24px;
+  }
+  

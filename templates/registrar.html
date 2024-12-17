@@ -8,18 +8,21 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}"> 
 </head>
 <body>
+    <main>
         <h1>Cadastre-se no Sistema! 🚀</h1>
 
         <!-- Mensagens Flash -->
-        {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %}
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{message}}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-        {% endif %}
-        {% endwith %}
 
         <div class="super-centralizar">
             <div class="formulario">
@@ -51,11 +54,10 @@
                         </div>
                     </fieldset>
                 </form>
-                <p>Já possui uma conta?<button class="pure-button"> <a href="{{ url_for('bp_inicio.login') }}">Faça login aqui</a></button></p>
+                <p>Já possui uma conta? <br><br><button class="pure-button"> <a href="{{ url_for('bp_inicio.login') }}">Faça login aqui</a></button></p>
 
             </div>
-
         </div>
-
+    </main>
 </body>
 </html>

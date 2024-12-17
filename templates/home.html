@@ -15,17 +15,22 @@
         <h1 class="centralizar">Biblioteca do Igao - Painel de Administrador</h1>
     </header>
 
-    <!-- Colocar no menuzinho do lado-->
-    <button> <a href="{{ url_for('bp_inicio.logout') }}"><p>Logout</p></a></button>
-
     <main>
-        <h2>Bem-vindo ao Painel de Administrador, {{nome}}!! 😀</h2>
-        <p>Selecione uma das opções abaixo para gerenciar livros, categorias ou autores.</p><br>
+        <h2 class="centralizar">Bem-vindo ao Painel de Administrador, {{nome}}!! 😀</h2><br>
 
-        <b>Adicionar & Ver</b>
-        <div class="toggle-button" data-target="formularios1" onclick="toggleContent(this)">
+        <span class="pure-button-secondary" style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ url_for('bp_inicio.logout') }}">Logout</a>
+            <a href="{{ url_for('bp_inicio.index') }}"">Home</a>
+        </div>
+
+        <p>Selecione uma das opções abaixo para gerenciar e visualizar <b>livros</b>, <b>categorias</b>, <b>autores</b>, <b>empréstimos</b> e <b>usuários</b>.</p>
+
+        <div class="imagem-botao toggle-button" data-target="formularios1" onclick="toggleContent(this)">
             <p>Livros - Categorias - Autores &nbsp; </p>         
-            <span>&#9655;</span> <!-- Setinha para a direita -->
+            <span><img src="static/img/arrow.svg"></span> <!-- Setinha para a direita -->
         </div>
 
         <div id="formularios1" class="formularios-esconder">
@@ -38,7 +43,7 @@
 
                             <div class="pure-control-group">
                                 <label for="titulo"> <h3>Título</h3> </label> <!-- O label tem uma margem, mas que pode ser removida tranquilamente. Eu não a removi pois gostei :O -->
-                                <input class="pure-input-1-1" type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required>
+                                <input class="pure-input-1-2" type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required>
                             </div>
 
                             <div class="pure-control-group">
@@ -79,7 +84,7 @@
 
                             <div class="pure-control-group">
                                 <label for="isbn"> <h3>ISBN</h3> </label>
-                                <input type="text" id="isbn" name="isbn" placeholder="Digite o ISBN" required><br>
+                                <input type="text" id="isbn" name="isbn" placeholder="Digite o ISBN" class="pure-input-1-2" required><br>
                             </div>
 
                             <div class="pure-control-group">
@@ -147,7 +152,7 @@
 
                             <div class="pure-control-group">
                                 <label for="nacionalidade"><h3>Nacionalidade:</h3></label>
-                                <input type="text" id="nacionalidade" name="nacionalidade" placeholder="Digite a nacionalidade"
+                                <input type="text" id="nacionalidade" name="nacionalidade" class="pure-input-1-2" placeholder="Digite a nacionalidade"
                                 required><br>
                             </div>
                             
@@ -169,9 +174,10 @@
         </div>
         <hr>
 
-        <div class="toggle-button" data-target="formularios2" onclick="toggleContent(this)">
+        <div class="imagem-botao toggle-button" data-target="formularios2" onclick="toggleContent(this)">
             <p>Empréstimos - Usuários &nbsp;</p>
-            <span>&#9655;</span> 
+            <span> <span><img src="static/img/arrow.svg"></span> <!-- Setinha para a direita -->
+        </span> 
         </div>
         <div id="formularios2" class="formularios-esconder">
 
@@ -278,13 +284,13 @@
                 </div>
             </div> 
         </div>
-
+        <hr>
         <div class="flash_messages">
-            {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
-                    {% for message in messages %}
+                    {% for category, message in messages %}
                         <div class="alert alert-warning" role="alert">
-                            {{message}}
+                            <p class="{{ category }} pure-button">{{message}}</p>
                         </div>
                     {% endfor %}
                 {% endif %}

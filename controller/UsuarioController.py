@@ -19,7 +19,7 @@ def add_usuario():
             
             if referer and "users/add" in referer or session.get("tipo") != "admin": #Verifica se a pessoa está vindo do cadastro comum. Caso sim, o tipo do usuário deve ser comum. Também verifica se o usuário é admin, pois somente admins devem criar novos admins (caso contrário, toda a segurança do sistema iria para o ralo)
                 tipo = "Comum"
-                
+                 
             data_criacao = datetime.now().replace(second=0, microsecond=0)
             if not all([nome, email, tipo, senha, data_criacao]):
                 flash("Todos os campos são obrigatórios.", "error")

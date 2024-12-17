@@ -2,8 +2,8 @@
 .formularios-esconder.show
 {
   display: flex;
-  flex-wrap: wrap; /* Serve para alinhar os formulários em 3 por linha. Precisa de outro CSS para funcionar plenamente */
-  gap: 20px; /* Espaço entre os formulários */
+  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+  gap: 20px; /* Espaçamento entre os formulários */
 }
 
 
@@ -15,8 +15,8 @@
 }
 
 .toggle-button span {
-  transform: rotate(0deg);
-  transition: transform 0.3s ease; /* Animação suave ao rotacionar a setinha */
+  transform: rotate(0deg); /* Setinha inicial para a direita */
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
 }
 
 .toggle-button.active span {
@@ -25,5 +25,12 @@
 
 .formularios-esconder {
   display: none; 
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
   margin-top: 10px;
 }
+
+.formularios-esconder.show {
+  transition: transform 0.3s ease; /* Animação suave ao rotacionar */
+  display: flex;
+}
+

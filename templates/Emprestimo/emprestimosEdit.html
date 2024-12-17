@@ -1,88 +1,79 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Empréstimo</title>
-    <!-- Link para o arquivo de estilos CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Biblioteca - Editar Empréstimo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}">
 </head>
 
 <body>
-
-    <header>
-        <!-- Título da página de edição de empréstimo -->
-        <h1>Editar Empréstimo</h1>
-    </header>
-
     <main>
-        <!-- Subtítulo informando que é um formulário de edição -->
-        <h2>Formulário de Edição</h2>
+        <h1>Editar Empréstimo 📚</h1>
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-warning" role="alert">
-            {{ message }}
+        <!-- Mensagens Flash -->
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
 
-        <!-- Formulário para edição de um empréstimo específico -->
-        <form action="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}" method="POST">
+        <div class="super-centralizar">
+            <div class="formulario">
+                <h1 class="centralizar">Formulário de Edição ✏️</h1>
+                <form action="{{ url_for('bp_loan.edit_emprestimo', emprestimo_id=emprestimo.id) }}" method="POST" class="pure-form pure-form-aligned">
+                    <fieldset>
+                        <div class="pure-control-group">
+                            <label for="usuario_id"> <h3>Usuário</h3></label>
+                            <select id="usuario_id" name="usuario_id" required>
+                                {% for usuario in usuarios %}
+                                <option value="{{ usuario.id }}" {% if usuario.id == emprestimo.usuario_id %}selected{% endif %}>
+                                    {{ usuario.nome }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
 
-            <!-- Campo de edição para selecionar o usuário -->
-            <div>
-                <label for="usuario_id">Usuário:</label>
-                <select id="usuario_id" name="usuario_id" required>
-                    {% for usuario in usuarios %}
-                    <option value="{{ usuario.id }}" {% if usuario.id == emprestimo.usuario_id %}selected{% endif %}>
-                        {{ usuario.nome }}
-                    </option>
-                    {% endfor %}
-                </select>
+                        <div class="pure-control-group">
+                            <label for="livro_id"> <h3>Livro</h3></label>
+                            <select id="livro_id" name="livro_id" required>
+                                {% for livro in livros %}
+                                <option value="{{ livro.id }}" {% if livro.id == emprestimo.livro_id %}selected{% endif %}>
+                                    {{ livro.titulo }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="pure-control-group">
+                            <label for="data_emprestimo"> <h3>Data do Empréstimo</h3></label>
+                            <input type="datetime-local" id="data_emprestimo" name="data_emprestimo" value="{{ emprestimo.data_emprestimo }}" required>
+                        </div>
+
+                        <div class="pure-control-group">
+                            <label for="data_devolucao_prevista"> <h3>Data Prevista de Devolução</h3></label>
+                            <input type="date" id="data_devolucao_prevista" name="data_devolucao_prevista" value="{{ emprestimo.data_devolucao_prevista }}" required>
+                        </div>
+
+                        <div class="pure-control-group">
+                            <label></label>
+                            <button type="submit" class="pure-button pure-button-primary pure-input-1-2">Salvar Alterações</button>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <p><button class="pure-button"><a href="{{ url_for('bp_loan.view_emprestimos') }}">Voltar para a lista de empréstimos</a></button></p>
             </div>
-
-            <!-- Campo de edição para selecionar o livro -->
-            <div>
-                <label for="livro_id">Livro:</label>
-                <select id="livro_id" name="livro_id" required>
-                    {% for livro in livros %}
-                    <option value="{{ livro.id }}" {% if livro.id == emprestimo.livro_id %}selected{% endif %}>
-                        {{ livro.titulo }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <!-- Campo de edição para a data do empréstimo -->
-            <div>
-                <label for="data_emprestimo">Data do Empréstimo:</label>
-                <input type="datetime-local" id="data_emprestimo" name="data_emprestimo" 
-                    value="{{ emprestimo.data_emprestimo }}" required>
-            </div>
-
-            <!-- Campo de edição para a data de devolução prevista -->
-            <div>
-                <label for="data_devolucao_prevista">Data Prevista de Devolução:</label>
-                <input type="date" id="data_devolucao_prevista" name="data_devolucao_prevista" 
-                    value="{{ emprestimo.data_devolucao_prevista }}" required>
-            </div>
-
-
-
-            <!-- Botão para submeter o formulário e salvar alterações -->
-            <button type="submit">Salvar Alterações</button>
-        </form>
+        </div>
     </main>
-
-    <!-- Rodapé com link para voltar à lista de empréstimos -->
-    <footer>
-        <a href="{{ url_for('bp_loan.view_emprestimos') }}" class="button">Voltar para a lista de empréstimos</a>
-    </footer>
-
 </body>
 
 </html>
