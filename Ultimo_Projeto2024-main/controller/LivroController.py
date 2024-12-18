@@ -138,3 +138,41 @@ def delete_book(id):
 @livroController.route("/")
 def books_home():
     return redirect(url_for('bp_books.view_books'))
+
+
+@livroController.route("/addLivrosBase", methods=['POST',"GET"])
+def addBase():
+    livros = [
+        {"titulo": "O Senhor dos Anéis", "isbn": "9780345339706", "data_publicacao": "1954-07-29", "autor_id": 1, "categoria_id": 1, "quantidade_total": 5},
+        {"titulo": "1984", "isbn": "9780451524935", "data_publicacao": "1949-06-08", "autor_id": 2, "categoria_id": 2, "quantidade_total": 10},
+        {"titulo": "Orgulho e Preconceito", "isbn": "9780141439518", "data_publicacao": "1813-01-28", "autor_id": 3, "categoria_id": 3, "quantidade_total": 7},
+        {"titulo": "A Arte da Guerra", "isbn": "9781599869773", "data_publicacao": "500-01-01", "autor_id": 4, "categoria_id": 4, "quantidade_total": 8},
+        {"titulo": "O Pequeno Príncipe", "isbn": "9780156012195", "data_publicacao": "1943-04-06", "autor_id": 5, "categoria_id": 5, "quantidade_total": 12},
+        {"titulo": "O Alquimista", "isbn": "9780061122415", "data_publicacao": "1988-05-01", "autor_id": 6, "categoria_id": 6, "quantidade_total": 10},
+        {"titulo": "O Código Da Vinci", "isbn": "9780307474278", "data_publicacao": "2003-03-18", "autor_id": 7, "categoria_id": 7, "quantidade_total": 15},
+        {"titulo": "Dom Quixote", "isbn": "9780060934347", "data_publicacao": "1605-01-01", "autor_id": 8, "categoria_id": 8, "quantidade_total": 6},
+        {"titulo": "Harry Potter e a Pedra Filosofal", "isbn": "9780439554930", "data_publicacao": "1997-06-26", "autor_id": 9, "categoria_id": 9, "quantidade_total": 20},
+        {"titulo": "O Hobbit", "isbn": "9780547928227", "data_publicacao": "1937-09-21", "autor_id": 10, "categoria_id": 1, "quantidade_total": 10},
+        {"titulo": "O Guia do Mochileiro das Galáxias", "isbn": "9780345391803", "data_publicacao": "1979-10-12", "autor_id": 11, "categoria_id": 2, "quantidade_total": 9},
+        {"titulo": "Cem Anos de Solidão", "isbn": "9780060883287", "data_publicacao": "1967-06-05", "autor_id": 12, "categoria_id": 3, "quantidade_total": 8},
+        {"titulo": "A Revolução dos Bichos", "isbn": "9780451526342", "data_publicacao": "1945-08-17", "autor_id": 2, "categoria_id": 4, "quantidade_total": 14},
+        {"titulo": "A Cabana", "isbn": "9780964729230", "data_publicacao": "2007-05-01", "autor_id": 13, "categoria_id": 5, "quantidade_total": 11},
+        {"titulo": "A Menina que Roubava Livros", "isbn": "9780375842207", "data_publicacao": "2005-03-14", "autor_id": 14, "categoria_id": 6, "quantidade_total": 8},
+        {"titulo": "Jogos Vorazes", "isbn": "9780439023481", "data_publicacao": "2008-09-14", "autor_id": 15, "categoria_id": 7, "quantidade_total": 9},
+        {"titulo": "Duna", "isbn": "9780441172719", "data_publicacao": "1965-08-01", "autor_id": 16, "categoria_id": 8, "quantidade_total": 7},
+        {"titulo": "A História Sem Fim", "isbn": "9780140386335", "data_publicacao": "1979-09-01", "autor_id": 17, "categoria_id": 9, "quantidade_total": 10},
+        {"titulo": "O Apanhador no Campo de Centeio", "isbn": "9780316769488", "data_publicacao": "1951-07-16", "autor_id": 18, "categoria_id": 10, "quantidade_total": 5},
+        {"titulo": "Crepúsculo", "isbn": "9780316015844", "data_publicacao": "2005-10-05", "autor_id": 19, "categoria_id": 11, "quantidade_total": 10},
+    ]
+
+    for livro in livros:
+        livroRepository.addBook(
+            titulo=livro["titulo"],
+            isbn=livro["isbn"],
+            data_publicacao=livro["data_publicacao"],
+            autor_id=livro["autor_id"],
+            categoria_id=livro["categoria_id"],
+            quantidade_total=livro["quantidade_total"],
+        )
+    print("Catálogo de livros criado com sucesso!")
+    return redirect(url_for('bp_inicio.index'))

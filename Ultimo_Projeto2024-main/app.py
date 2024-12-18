@@ -13,27 +13,6 @@ from controller.MultasController import multasController
 app = Flask(__name__)
 app.secret_key = '4a466f32ff8af1aad05ac24b5eced2531da40d014c105d9f67caf44c73fd73fc'
 
-#rotas_publicas=['static','blueprint_cool.index','blueprint_cool.login']
-#rotas_privadas=['static','blueprint_cool.livros', 'blueprint_cool.logout', 'blueprint_cool.limpar', 'blueprint_cool.adicionar_livro']
-
-#@app.before_request
-#def verificaSessao():
-    
-#    if request.endpoint not in rotas_privadas and request.endpoint not in rotas_publicas:
-#        abort(404)
-#    if request.endpoint in rotas_publicas:
-#        return
-    
-#    elif "usuario" not in session:
-#        print("Bloqueado")
-#        abort(403)
-
-    #if request.endpoint in rotas_privadas:
-    #        if session.get("tipo") != "admin":
-    #            print("Acesso negado - Usuário comum tentando acessar rota restrita")
-    #            abort(403)
-
-#    return
 
 init_database(app)
 

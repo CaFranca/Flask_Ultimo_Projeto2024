@@ -30,8 +30,6 @@ class EmprestimosRepository:
             emprestimo = self.emprestimosDAO.buscar_por_id(emprestimo_id)
             
             if emprestimo:
-                print("Empréstimo encontrado!")
-                print("O ID do Empréstimo é:", emprestimo.id)
                 return emprestimo
             else:
                 print(f"Empréstimo com ID {emprestimo_id} não encontrado.")

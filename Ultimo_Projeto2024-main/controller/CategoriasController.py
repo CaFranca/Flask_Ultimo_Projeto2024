@@ -62,3 +62,36 @@ def delete_category(id):
     else:
         flash(mensagem, "error")
     return redirect(url_for('bp_categories.view_categories'))
+
+@categoryController.route('/add_base', methods=['POST','GET'])
+def criar_categorias_demo():
+    categorias = [
+        "Ficção Científica",
+        "Romance",
+        "Ficção Fantástica",
+        "Clássicos",
+        "Autoajuda",
+        "Biografias",
+        "Suspense",
+        "História",
+        "Literatura Infantil",
+        "Distopia",
+        "Aventura",
+        "Poesia",
+        "Negócios",
+        "Espiritualidade",
+        "Tecnologia",
+        "Saúde e Bem-Estar",
+        "Ciências",
+        "Mistério",
+        "Arte e Design",
+        "Culinária"
+    ]
+
+    for categoria in categorias:
+        mensagem = categoryRepository.addCategory(categoria)
+        if "sucesso" in mensagem.lower():
+            print(f"Categoria '{categoria}' adicionada com sucesso!")
+        else:
+            print(f"Erro ao adicionar categoria '{categoria}': {mensagem}")
+    print("Processo de criação de categorias concluído.")

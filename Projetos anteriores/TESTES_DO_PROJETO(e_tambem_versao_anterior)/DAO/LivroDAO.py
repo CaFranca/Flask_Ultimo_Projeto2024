@@ -1,4 +1,4 @@
-from model import Livros, Autores, Categorias,Emprestimos
+from model import Livros, Autores, Categorias,Emprestimos, Multas
 from database import database
 
 
@@ -12,13 +12,13 @@ class LivroDAO:
             return []
 
     @staticmethod
-    def addBook(titulo, isbn, data_publicacao,  autor_id, categoria_id, quantidade_total):
+    def addBook(titulo, isbn, data_publicacao, autor_id, categoria_id, quantidade_total):
         try:
             novo_livro = Livros(
                 titulo=titulo,
                 isbn=isbn,
                 data_publicacao=data_publicacao,
-                quantidade_total = quantidade_total,
+                quantidade_total=quantidade_total,
                 autor_id=autor_id,
                 categoria_id=categoria_id,
             )
@@ -33,7 +33,7 @@ class LivroDAO:
             return False
 
     @staticmethod
-    def updateBook(id, titulo, isbn, data_publicacao,  autor_id, categoria_id, quantidade_total):
+    def updateBook(id, titulo, isbn, data_publicacao, autor_id, categoria_id, quantidade_total):
         try:
             livro = Livros.query.get(id)
             if not livro:
@@ -46,6 +46,9 @@ class LivroDAO:
             livro.autor_id = autor_id
             livro.categoria_id = categoria_id
             livro.quantidade_total = quantidade_total
+
+            # Atualiza a quantidade disponível após modificar o livro
+            LivroDAO.atualizar_quantidade_disponivel(livro.id)
 
             database.session.commit()
             return True
@@ -86,8 +89,19 @@ class LivroDAO:
                 print(f"Livro com ID {id} não encontrado.")
                 return False
 
+            # Exclui os empréstimos associados ao livro
+            emprestimos = Emprestimos.query.filter_by(livro_id=id).all()
+            for emprestimo in emprestimos:
+                multas = Multas.query.filter_by(emprestimo_id=emprestimo.id).all()
+                for multa in multas:
+                    database.session.delete(multa)
+                    print(f"Multa com ID {multa.id} excluída.")
+                database.session.delete(emprestimo)
+                print(f"Empréstimo com ID {emprestimo.id} excluído.")
+
             database.session.delete(livro)
             database.session.commit()
+            print(f"Livro com ID {id} excluído com sucesso!")
             return True
         except Exception as e:
             database.session.rollback()
@@ -113,9 +127,31 @@ class LivroDAO:
             print(f"Erro ao realizar consulta personalizada: {e}")
             return []
 
-    def atualizar_quantidade_disponivel(self):
-        # Calcula a quantidade de livros disponíveis
-        quantidade_emprestados = len(Emprestimos.query.filter_by(livro_id=self.id, data_devolucao_real=None).all())
-        self.quantidade_disponivel = self.quantidade_total - quantidade_emprestados
-        database.session.commit()
+    @staticmethod
+    def atualizar_quantidade_disponivel(livro_id):
+        try:
+            livro = Livros.query.get(livro_id)
+            if livro:
+                livro.quantidade_total = int(livro.quantidade_total)
+                
+                quantidade_emprestados = len(Emprestimos.query.filter_by(livro_id=livro.id, data_devolucao_real=None).all())
+                
+                quantidade_emprestados = int(quantidade_emprestados)
+                
+                livro.quantidade_disponivel = livro.quantidade_total - quantidade_emprestados
+                database.session.commit()
+                print(f"Quantidade disponível do livro {livro_id} atualizada.")
+        except Exception as e:
+            print(f"Erro ao atualizar quantidade disponível do livro: {e}")
 
+    @staticmethod
+    def getEmprestimoById(id):
+        try:
+            emprestimo = Emprestimos.query.get(id)
+            if not emprestimo:
+                print(f"Empréstimo com ID {id} não encontrado.")
+                return None
+            return emprestimo
+        except Exception as e:
+            print(f"Erro ao buscar empréstimo por ID: {e}")
+            return None

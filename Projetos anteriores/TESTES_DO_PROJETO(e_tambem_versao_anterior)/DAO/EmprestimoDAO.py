@@ -15,11 +15,6 @@ class EmprestimosDAO:
         database.session.add(emprestimo)
         database.session.commit()
 
-        # Atualiza a quantidade disponível do livro após o empréstimo
-        livro = Livros.query.get(livro_id)
-        if livro:
-            livroDAO.atualizar_quantidade_disponivel(livro_id)
-
         return emprestimo
 
     @staticmethod
@@ -56,14 +51,10 @@ class EmprestimosDAO:
     @staticmethod
     def deletar_emprestimo(emprestimo_id):
         try:
-            # Buscar o empréstimo
             emprestimo = Emprestimos.query.get(emprestimo_id)
             
             if emprestimo:
-                # Buscar a multa associada ao empréstimo
-                multa = Multas.query.filter(Multas.emprestimo_id == emprestimo_id).first()
-                
-                # Se houver multa associada, exclui a multa
+                multa = Multas.query.filter(Multas.emprestimo_id == emprestimo_id).first() 
                 if multa:
                     database.session.delete(multa)
                 
@@ -108,10 +99,6 @@ class EmprestimosDAO:
             emprestimo.data_devolucao_real = data_devolucao_real
             database.session.commit()
 
-            # Atualiza a quantidade disponível do livro após a devolução
-            livro = Livros.query.get(emprestimo.livro_id)
-            if livro:
-                livro.atualizar_quantidade_disponivel()
 
             return True
         return False

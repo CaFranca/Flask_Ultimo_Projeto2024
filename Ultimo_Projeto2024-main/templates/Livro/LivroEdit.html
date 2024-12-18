@@ -55,8 +55,7 @@
             <!-- Campo de edição para o número de páginas do livro -->
             <div>
                 <label for="numero_paginas">Quantidade Total:</label>
-                <input type="text" name="quantidade_total" id="quantidade_total" value="{{ livro.quantidade_total }}"
-                    required>
+                <input type="number" name="quantidade_total" id="quantidade_total" value="{{ livro.quantidade_total }}"  min="0" required>
             </div>
 
             <!-- Seletor para editar o autor do livro -->

@@ -54,6 +54,12 @@ class LivroRepository:
             return self.livroDAO.getCategorias()
         except Exception as e:
             return {"error": f"Erro ao buscar categorias: {e}"}
+        
+    def getEmprestimoByID(self, id):
+        try:
+            return self.livroDAO.getEmprestimoByID(id)
+        except Exception as e:
+            return {"error": f"Erro ao buscar Emprestimos: {e}"}
 
     def deleteBook(self, id):
         try:
@@ -68,3 +74,19 @@ class LivroRepository:
             return [livro.JSonificar() for livro in livros]
         except Exception as e:
             return {"error": f"Erro ao realizar consulta personalizada: {e}"}
+        
+
+    def atualizar_quantidade_disponivel(self, livro_id, aumentar=True):
+        try:
+            # Chama o método do DAO para atualizar a quantidade disponível
+            livro = self.livroDAO.getBookById(livro_id)  # Busca o livro pelo ID
+            if livro:
+                if aumentar:
+                    livro.quantidade_disponivel += 1  # Aumenta a quantidade disponível
+                else:
+                    livro.quantidade_disponivel -= 1  # Diminui a quantidade disponível
+                self.livroDAO.atualizar_quantidade_disponivel(livro.id)  # Atualiza o livro no banco de dados
+        except Exception as e:
+            print(f"Erro ao atualizar a quantidade disponível do livro: {e}")
+
+

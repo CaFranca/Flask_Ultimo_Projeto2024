@@ -4,7 +4,7 @@ from datetime import datetime
 
 emprestimoController = Blueprint('bp_loan', __name__)
 emprestimosRepository = EmprestimosRepository()
-
+livro_repository = LivroRepository()
 
 @emprestimoController.route('/add', methods=['POST'])
 def add_emprestimo():
@@ -16,12 +16,10 @@ def add_emprestimo():
         data_devolucao_prevista_bruta = request.form.get('data_devolucao_prevista')
         data_devolucao_prevista = datetime.strptime(data_devolucao_prevista_bruta, '%Y-%m-%d')
 
-        # Validação dos campos obrigatórios
         if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
             flash("Todos os campos são obrigatórios.", "error")
             return redirect(url_for('bp_loan.view_emprestimos'))
 
-        # Tentativa de criar o empréstimo
         response = emprestimosRepository.criarEmprestimo(
             usuario_id, livro_id, data_emprestimo, data_devolucao_prevista
         )
@@ -30,15 +28,14 @@ def add_emprestimo():
         else:
             flash("Empréstimo criado com sucesso!", "success")
 
-            # Atualiza a quantidade disponível do livro
-            livro = LivroRepository.getBookByIdt(livro_id)  # Busca o livro pelo ID
-            if livro:
-                livro.atualizar_quantidade_disponivel()  # Atualiza a quantidade disponível do livro
+            livro_id=int(livro_id)
+            livro_repository.atualizar_quantidade_disponivel(livro_id)
 
         return redirect(url_for('bp_loan.view_emprestimos'))
     except Exception as e:
         flash(f"Erro ao criar empréstimo: {e}", "error")
         return redirect(url_for('bp_loan.view_emprestimos'))
+
 
 
 @emprestimoController.route('/', methods=['GET'])
@@ -80,10 +77,11 @@ def edit_emprestimo(emprestimo_id):
                 flash("Devolução atualizada com sucesso!", "success")
                 print("Devolução atualizada com sucesso!", "success")
 
-                # Atualiza a quantidade disponível do livro após a devolução
-                livro = LivroRepository.buscarLivroPorId(livro_id)  # Busca o livro pelo ID
+                
+                livro = livro_repository.getBookById(livro_id)
+                print(livro.titulo)
                 if livro:
-                    livro.atualizar_quantidade_disponivel()  # Atualiza a quantidade disponível do livro
+                    livro_repository.atualizar_quantidade_disponivel(livro.id)
 
             return redirect(url_for('bp_loan.view_emprestimos'))
 
@@ -103,14 +101,22 @@ def edit_emprestimo(emprestimo_id):
         return redirect(url_for('bp_loan.view_emprestimos'))
 
 
-@emprestimoController.route('/excluir/<int:emprestimo_id>', methods=['GET','POST'])
+@emprestimoController.route('/excluir/<int:emprestimo_id>', methods=['GET', 'POST'])
 def deletar_emprestimo(emprestimo_id):
     try:
+        emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
+        
         response = emprestimosRepository.deletarEmprestimo(emprestimo_id)
         if "Erro" in response:
             flash(response, "error")
         else:
             flash("Empréstimo excluído com sucesso!", "success")
+
+        if emprestimo.data_devolucao_real is not None:
+            flash("Este empréstimo já foi devolvido.", "warning")
+        else:
+            livro_id = emprestimo.livro_id 
+            livro_repository.atualizar_quantidade_disponivel(livro_id, aumentar=True)
 
         return redirect(url_for('bp_loan.view_emprestimos'))
     except Exception as e:
@@ -141,8 +147,15 @@ def listar_por_livro(livro_id):
 @emprestimoController.route('/marcar_devolvido/<int:emprestimo_id>', methods=['GET'])
 def marcar_devolvido(emprestimo_id):
     try:
+        emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
+        if emprestimo.data_devolucao_real is not None:
+            flash("Este empréstimo já foi devolvido.", "warning")
+            return redirect(url_for('bp_loan.view_emprestimos'))
+        
         # Atualiza a data de devolução real
         data_devolucao_real = datetime.now().replace(second=0, microsecond=0)
+        
+        
         response = emprestimosRepository.marcarDevolvido(emprestimo_id, data_devolucao_real)
 
         if "Erro" in response:
@@ -150,11 +163,9 @@ def marcar_devolvido(emprestimo_id):
         else:
             flash("Empréstimo marcado como devolvido com sucesso!", "success")
 
-            # Atualiza a quantidade disponível do livro após a devolução
-            emprestimo = emprestimosRepository.buscarEmprestimoPorId(emprestimo_id)
-            livro = LivroRepository.buscarLivroPorId(emprestimo.livro_id)
-            if livro:
-                livro.atualizar_quantidade_disponivel()  # Atualiza a quantidade disponível do livro
+
+            livro_id = emprestimo.livro_id
+            livro_repository.atualizar_quantidade_disponivel(livro_id, aumentar=True)
 
         return redirect(url_for('bp_loan.view_emprestimos'))
     except Exception as e:

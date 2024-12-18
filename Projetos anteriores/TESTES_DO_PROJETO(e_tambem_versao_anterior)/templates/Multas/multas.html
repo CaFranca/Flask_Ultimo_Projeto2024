@@ -10,29 +10,10 @@
 
 <body>
     <header>
-        <h1>Gerenciamento de Empréstimos</h1>
+        <h1>Gerenciamento de multas</h1>
     </header>
 
     <main>
-        <section>
-            <h2>Buscar Empréstimos</h2>
-            <form method="GET" action="{{ url_for('bp_loan.view_emprestimos') }}">
-                <div class="form-group">
-                    <label for="usuario_id">Usuário</label>
-                    <input type="text" id="usuario_id" name="usuario_id" placeholder="ID do Usuário"
-                        value="{{ request.args.get('usuario_id', '') }}">
-                </div>
-                <div class="form-group">
-                    <label for="livro_id">Livro</label>
-                    <input type="text" id="livro_id" name="livro_id" placeholder="ID do Livro"
-                        value="{{ request.args.get('livro_id', '') }}">
-                </div>
-                <button type="submit">Buscar</button>
-            </form>
-            <form method="GET" action="{{ url_for('bp_loan.view_emprestimos') }}">
-                <button type="submit" class="button" style="background-color: #f44336;">Limpar Filtros</button>
-            </form>
-        </section>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for message in messages %}
@@ -42,10 +23,7 @@
         {% endfor %}
         {% endif %}
         {% endwith %}
-        <h2>Empréstimos Cadastrados</h2>
-        <div>
-            <a href="{{ url_for('bp_loan.add_emprestimo') }}" class="button">Adicionar Novo Empréstimo</a>
-        </div>
+        <h2>Multas Cadastrados</h2>
         <table>
             <thead>
                 <tr>
@@ -61,7 +39,7 @@
                 {% for multa in multas %}
                 <tr>
                     <td>{{ multa.id }}</td>
-                    <td>{{ multa.usuario_id }}</td>
+                    <td>{{ multa.usuario.nome }}</td>
                     <td>{{ multa.valor }}</td>
                     <td>{{ multa.data_geracao }}</td>
                     <td>{{ multa.status }}</td>

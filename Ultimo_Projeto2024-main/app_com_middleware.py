@@ -25,7 +25,10 @@ rotas_privadas_administrativas = ['static',
     'bp_multas.gerar_multa',
     'bp_multas.excluir_multa',
     'bp_usuario.edit_usuario',
-    'bp_usuario.delete_usuario'
+    'bp_usuario.delete_usuario',
+    'bp_books.addBase',
+    'bp_categories.criar_categorias_demo',
+    'bp_autores.add_varios_autores'
 ]
 
 rotas_publicas = ['static',
