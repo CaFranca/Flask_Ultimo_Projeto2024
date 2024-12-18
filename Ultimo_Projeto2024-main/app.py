@@ -1,5 +1,4 @@
-from flask import Flask,render_template,flash,request,abort,session
-# Importa a configuração do banco de dados e as funções para inicialização
+from flask import Flask,render_template,flash
 from database import init_database
 from controller.AutorController import authorController
 from controller.LivroController import livroController
@@ -9,10 +8,8 @@ from controller.EmpresimoController import emprestimoController
 from controller.UsuarioController import usuarioController
 from controller.MultasController import multasController
 
-
 app = Flask(__name__)
 app.secret_key = '4a466f32ff8af1aad05ac24b5eced2531da40d014c105d9f67caf44c73fd73fc'
-
 
 init_database(app)
 
@@ -40,8 +37,6 @@ def nao_autorizado(e):
     print(e)
     return render_template('Erros/401.html'), 401
 
-
-# Manipulador de erros genéricos
 @app.errorhandler(Exception)
 def handle_generic_error(e):
     print(e)

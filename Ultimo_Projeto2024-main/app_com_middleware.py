@@ -1,5 +1,4 @@
 from flask import Flask, render_template, flash, request, abort, session
-# Importa a configuração do banco de dados e as funções para inicialização
 from database import init_database
 from controller.AutorController import authorController
 from controller.LivroController import livroController
