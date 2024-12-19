@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Categorias</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
+</head>
+
+<body>
+
+    <!-- Cabeçalho da página -->
+    <header>
+        <h1 class="centralizar">Lista de Categorias</h1>
+    </header>
+
+    <main>
+        <!-- Mensagens Flash -->
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Título secundário -->
+        <h2>Categorias Cadastradas 📋</h2>
+
+        <!-- Botões de ação -->
+        <div>
+            <a href="{{ url_for('bp_inicio.sucess') }}" class="pure-button pure-button-primary">Adicionar Nova Categoria</a>
+        </div><br>
+
+        <!-- Tabela que exibirá os dados das categorias -->
+        <table class="pure-table">
+            <!-- Cabeçalho da tabela -->
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Iteração sobre a lista de categorias fornecida pelo back-end -->
+                {% if categorias %}
+                    {% for categoria in categorias %}
+                    <tr>
+                        <td>{{ categoria.id }}</td>
+                        <td>{{ categoria.nome }}</td>
+                        <td>
+                            <a href="{{ url_for('bp_categories.edit_category', id=categoria.id) }}" class="pure-button pure-button-secondary">Editar</a>
+                            <form action="{{ url_for('bp_categories.delete_category', id=categoria.id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="pure-button pure-button-error" onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+                                    Excluir
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3">Nenhuma categoria encontrada.</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+    </main>
+
+    <!-- Rodapé da página -->
+    <footer>
+        <a href="{{ url_for('bp_inicio.index') }}" class="pure-button">Voltar à Página Inicial</a>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca do Igão - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"> <!-- A base é o https://pure-css.github.io/ --> <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}"> 
+</head>
+
+<body>
+    <header>
+        <h1 class="centralizar">Biblioteca do Igao - Painel de Administrador</h1>
+    </header>
+
+    <main>
+        <h2 class="centralizar">Bem-vindo ao Painel de Administrador, {{nome}}!! 😀</h2><br>
+
+        <span class="pure-button-secondary" style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        
+        <div id="mySidenav" class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+            <a href="{{ url_for('bp_inicio.logout') }}">Logout</a>
+            <a href="{{ url_for('bp_inicio.index') }}"">Home</a>
+        </div>
+
+        <p>Selecione uma das opções abaixo para gerenciar e visualizar <b>livros</b>, <b>categorias</b>, <b>autores</b>, <b>empréstimos</b> e <b>usuários</b>.</p>
+
+        <div class="imagem-botao toggle-button" data-target="formularios1" onclick="toggleContent(this)">
+            <p>Livros - Categorias - Autores &nbsp; </p>         
+            <span><img src="static/img/arrow.svg"></span> <!-- Setinha para a direita -->
+        </div>
+
+        <div id="formularios1" class="formularios-esconder">
+            <div class="formularios-container">
+                <div class="formulario">
+                    <h1 class="centralizar">Adicionar Livro</h1><br>
+
+                    <form action="{{ url_for('bp_books.add_book') }}" method="post" class="pure-form pure-form-aligned"> <!-- A classe é só para estilo mesmo. O mesmo vai se repetir abaixo. As classes não têm propósito a não ser estilo.-->
+                        <fieldset> <!-- Demarca os campos do formulário. Puramente por estilo.-->
+
+                            <div class="pure-control-group">
+                                <label for="titulo"> <h3>Título</h3> </label> <!-- O label tem uma margem, mas que pode ser removida tranquilamente. Eu não a removi pois gostei :O -->
+                                <input class="pure-input-1-2" type="text" id="titulo" name="titulo" placeholder="Digite o título do livro" required>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="autor_id"> <h3>Autor</h3> </label>
+                                
+                                <select id="autor_id" name="autor_id" class="pure-input-1-2" required>
+
+                                    <option value="" disabled>Selecione um autor</option>
+                                    <option value="0">Desconhecido</option>
+
+                                    {% if autores %}
+                                        {% for autor in autores %}
+                                            <option value="{{ autor.id }}">{{ autor.nome }}</option>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <option value="" disabled>Não há autores cadastrados</option>
+                                    {% endif %}
+
+                                </select>
+                            </div>
+                            <div class="pure-control-group">
+                                <label for="categoria_id"> <h3>Categoria</h3> </label>
+                                <select id="categoria_id" name="categoria_id" class="pure-input-1-2" required>
+                                    <option value="" disabled>Selecione a categoria</option>
+                                    <option value="0">Desconhecido</option>
+                                    {% if categorias %}
+                                        {% for categoria in categorias %}
+                                            <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="" disabled>Não há categorias cadastradas</option>
+                                    {% endif %}
+                                </select>
+                                <br>
+                            </div>
+
+
+                            <div class="pure-control-group">
+                                <label for="isbn"> <h3>ISBN</h3> </label>
+                                <input type="text" id="isbn" name="isbn" placeholder="Digite o ISBN" class="pure-input-1-2" required><br>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="quantidade_total"> <h3>Quantidade Total</h3> </label>
+                                <input type="number" id="quantidade_total" name="quantidade_total" class="pure-input-1-2" placeholder="Total Disponivel" required><br>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="publicadoEm"> <h3>Data de Publicação</h3> </label>
+                                <input type="date" id="publicadoEm" name="publicadoEm" required> 
+                            </div>
+
+                            
+                            <div class="pure-control-group">
+                                <label></label> <!-- Esse label é bem na gambiarra. Serve pra dar o espaço antes do botão, pra alinhar com os outros campos input-->
+                                <button type="submit" class="pure-button pure-button-primary">Adicionar Livro</button>
+                            </div>
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button"><a href="{{ url_for('bp_books.view_books') }}">Ver Livros</a></button>
+                            </div>
+
+                        </fieldset>
+                    </form>
+        
+                </div>
+
+                <div class="formulario">
+                    <h1 class="centralizar">Adicionar Categoria</h1><br>
+                    <form action="{{ url_for('bp_categories.add_category') }}" method="post" class="pure-form pure-form-aligned">
+                        <fieldset>
+
+                            <div class="pure-control-group">
+                                <label for="categoria"><h3>Categoria</h3></label>
+                                <input type="text" id="categoria" name="categoria" class="pure-input-1-2" placeholder="Insira a categoria" required>
+                            </div>
+                        
+                            <div class="pure-control-group">
+                                <label></label> <!-- Chamar o label assim, sem nada, é a mesma coisa que chamar uma função margem-->
+                                <button type="submit" class="pure-button pure-button-primary">Adicionar Categoria</button>
+                            </div>
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button"><a href="{{ url_for('bp_categories.view_categories') }}">Ver Categorias</a></button>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+
+                <div class="formulario">
+                    <h1 class="centralizar">Cadastro de Autor</h1><br>
+                    <form action="{{ url_for('bp_autores.add_autor') }}" method="post" class="pure-form pure-form-aligned">
+                        <fieldset>
+
+                            <div class="pure-control-group">
+                                <label for="nome"><h3>Nome do Autor</h3></label>
+                                <input type="text" id="nome" name="nome" placeholder="Digite o nome do autor" class="pure-input-1-2" required><br>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="data_nascimento"><h3>Data de Nascimento:</h3></label>
+                                <input type="date" id="data_nascimento" name="data_nascimento" required><br>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="nacionalidade"><h3>Nacionalidade:</h3></label>
+                                <input type="text" id="nacionalidade" name="nacionalidade" class="pure-input-1-2" placeholder="Digite a nacionalidade"
+                                required><br>
+                            </div>
+                            
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button type="submit" class="pure-button pure-button-primary">Cadastrar Autor</button>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button"><a href="{{ url_for('bp_autores.view_autores') }}">Ver Autores</a></button>
+                            </div>
+
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div> <!-- Aqui termina a primeira fileira de formulários-->
+        </div>
+        <hr>
+
+        <div class="imagem-botao toggle-button" data-target="formularios2" onclick="toggleContent(this)">
+            <p>Empréstimos - Usuários &nbsp;</p>
+            <span> <span><img src="static/img/arrow.svg"></span> <!-- Setinha para a direita -->
+        </span> 
+        </div>
+        <div id="formularios2" class="formularios-esconder">
+
+            <div class="formularios-container"></div>
+
+                <div class="formulario">
+                    <h1 class="centralizar">Adicionar Empréstimo</h1>
+
+                    <form action="{{ url_for('bp_loan.add_emprestimo') }}" method="post" class="pure-form pure-form-aligned">
+                        <fieldset>
+                            <div class="pure-control-group">
+
+                                <label for="usuario_id"> <h3>Usuário</h3> </label>
+                                <select id="usuario_id" name="usuario_id" class="pure-input-1-2" required>
+                                    <option value="" disabled>Selecione um usuário</option>
+                                    {% if usuarios %}
+                                        {% for usuario in usuarios %}
+                                            <option value="{{ usuario.id }}">{{ usuario.nome }}</option>
+                                        {% endfor %}
+
+                                    {% else %}
+                                        <option value="" disabled>Não há usuários cadastrados</option>
+                                    {% endif %}
+                                </select>
+
+                            </div>
+                            <div class="pure-control-group">
+
+                                <label for="livro_id"> <h3>Livro</h3> </label>
+                                <select id="livro_id" name="livro_id" class="pure-input-1-2" required>
+                                    <option value="" disabled>Selecione um livro</option>
+                                    {% if livros %}
+                                        {% for livro in livros %}
+                                            <option value="{{ livro.id }}">{{ livro.titulo }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="" disabled>Não há livros cadastrados</option>
+                                    {% endif %}
+                                </select><br>
+
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label for="data_devolucao_prevista"> <h3>Data Prevista para Devolução</h3> </label>
+                                <input type="date" id="data_devolucao_prevista" name="data_devolucao_prevista" required>
+                            </div>
+
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button pure-button-primary" type="submit">Adicionar Empréstimo</button>
+                            </div>                        
+                        
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button"><a href="{{ url_for('bp_loan.view_emprestimos') }}">Ver Empréstimos</a></button>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                </div>
+
+                <div class="formulario">
+                    <h1 class="centralizar">Editar Usuário</h1>
+
+                   
+                            <div class="pure-control-group">
+                                <label></label>
+                                <button class="pure-button"><a href="{{ url_for('bp_usuario.view_usuarios') }}">Ver Usuários</a></button>
+                            </div>
+
+
+                </div>
+            </div> 
+        </div>
+        <hr>
+        <div class="flash_messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-warning" role="alert">
+                            <p class="{{ category }} pure-button">{{message}}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+    </main>
+
+    <!-- Rodapé da página -->
+    <footer>
+        <p>&copy; 2024 Biblioteca Igao</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+
+</body>
+</html>
