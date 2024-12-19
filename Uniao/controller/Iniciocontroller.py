@@ -16,7 +16,7 @@ def sucess():
             usuarios=UsuarioDAO.listar_todos()
             emprestimos=EmprestimosDAO.listar_todos()
             return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
-        
+        return render_template("home.html")
         
 
 @padraoController.route("/")
@@ -28,6 +28,7 @@ def login():
     if 'usuario' in session:
         flash(f"Você já está logado como {session['nome']}!", "info")
         return redirect(url_for('bp_inicio.sucess'))
+    
 
     if request.method == "POST":
         usuario = request.form["usuario"].strip()  # Remove espaços extras
