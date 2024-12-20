@@ -119,5 +119,11 @@ def handle_generic_error(e):
     print(e)
     return render_template('Erros/erro.html', message=str(e)), 500
 
+def antiXSS(valor):
+        for char in valor:
+            if char == "<" or char ==">" or char == "'" or char == "=" or char == '"':
+                print("Erro: tentativa de XSS")
+                return True
+            
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,12 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from repository import AutorRepository
+from repository import AutorRepository, UsuarioRepository
 from datetime import datetime
 
-# Cria o blueprint para a rota de autores
 authorController = Blueprint('bp_autores', __name__)
-
-# Instancia o repositório de autores
 autorRepository = AutorRepository()
+usuarioRepository = UsuarioRepository()
+
 
 # Exibe todos os autores
 @authorController.route("/autores", methods=["GET"])
@@ -26,9 +25,21 @@ def add_autor():
         data_nascimentobruta = request.form.get("data_nascimento")
         nacionalidade = request.form.get("nacionalidade")
 
+        if autorRepository.antiXSS(nome) == None:
+            flash("Houve um erro: tentativa de XSS", "error")
+            print("Tentativa de XSS")
+            return redirect(url_for('bp_inicio.index'))
+
+        if autorRepository.antiXSS(nacionalidade) == None:
+            flash("Houve um erro: tentativa de XSS", "error")
+            print("Tentativa de XSS")
+            return redirect(url_for('bp_inicio.index'))
+
         if not nome or not data_nascimentobruta or not nacionalidade:
             flash("Todos os campos são obrigatórios.", "error")
             return redirect(url_for('bp_inicio.index'))
+        
+
         
         data_nascimento = datetime.strptime(data_nascimentobruta, '%Y-%m-%d').date()
         mensagem = autorRepository.addAutor(nome, data_nascimento, nacionalidade)
@@ -46,6 +57,16 @@ def edit_autor(id):
             nome = request.form.get("nome")
             data_nascimentoBruta = request.form.get("data_nascimento")
             nacionalidade = request.form.get("nacionalidade")
+
+            if autorRepository.antiXSS(nome) == None:
+                flash("Houve um erro: tentativa de XSS", "error")
+                print("Tentativa de XSS")
+                return redirect(url_for('bp_inicio.index'))
+
+            if autorRepository.antiXSS(nacionalidade) == None:
+                flash("Houve um erro: tentativa de XSS", "error")
+                print("Tentativa de XSS")
+                return redirect(url_for('bp_inicio.index'))
 
             if not nome or not data_nascimentoBruta or not nacionalidade:
                 flash("Todos os campos são obrigatórios.", "error")
@@ -124,3 +145,5 @@ def add_varios_autores():
     except Exception as e:
         flash(f"Erro ao adicionar autores: {e}", "error")
         return redirect(url_for('bp_inicio.index'))
+    
+    

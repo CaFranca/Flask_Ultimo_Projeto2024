@@ -13,14 +13,30 @@ def add_usuario():
         try:
             nome = request.form.get('nome')
             email = request.form.get('email')
-            senha = sha256(request.form.get('senha').encode('utf-8')).hexdigest()
+            senha = request.form.get('senha')
             tipo = 'usuario'
             data_criacao = datetime.now().replace(second=0, microsecond=0)
+
+            nome = usuariosRepository.antiXSS(nome)
+            email = usuariosRepository.antiXSS(email)
+
             if not all([nome, email, senha, tipo, data_criacao]):
                 flash("Todos os campos são obrigatórios.", "error")
                 return redirect(url_for('bp_usuario.add_usuario'))
             
-            # Verifica se o e-mail ou nome já existem usando o repositório
+            if "@" not in email:
+                flash("O email deve conter o símbolo @", "info")
+                redirect(url_for('bp_usuario.add_usuario'))
+
+            senha_correta = usuariosRepository.verificarSenha(senha)
+            if senha_correta != True:
+                flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
+                return redirect(url_for('bp_usuario.add_usuario'))
+            
+            if nome is None or email is None:
+                flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
+                return redirect(url_for('bp_usuario.add_usuario'))
+            
             if usuariosRepository.usuario_existe_por_email(email):
                 flash("E-mail já está em uso. Por favor, use outro.", "error")
                 return redirect(url_for('bp_usuario.add_usuario'))
@@ -67,6 +83,16 @@ def edit_usuario(usuario_id):
                 flash("Todos os campos são obrigatórios para atualizar.", "error")
                 return redirect(url_for('bp_usuario.edit_usuario', usuario_id=usuario_id))
 
+            if usuariosRepository.verificarSenha(nome) != True:
+                flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
+                print("Entrada inválida detectada. Verifique os campos e tente novamente.")
+                return redirect(url_for('bp_usuario.add_usuario'))
+            
+            if usuariosRepository.antiXSS(nome) is None or usuariosRepository.antiXSS(email) is None:
+                flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
+                print("Entrada inválida detectada. Verifique os campos e tente novamente.")
+                return redirect(url_for('bp_usuario.add_usuario'))
+
             response = usuariosRepository.atualizar_usuario(usuario_id, nome, email, senha, tipo, data_criacao)
             if "Erro" in response:
                 flash(response, "error")
@@ -75,7 +101,6 @@ def edit_usuario(usuario_id):
 
             return redirect(url_for('bp_usuario.view_usuarios'))
 
-        # Recuperação do usuário para exibição no formulário
         usuario = usuariosRepository.buscarUsuarioPorId(usuario_id)
         if not usuario:
             flash("Usuário não encontrado.", "error")

@@ -1,4 +1,4 @@
-from flask import redirect, url_for
+from flask import redirect, url_for, flash
 from DAO import UsuarioDAO
 from datetime import datetime
 
@@ -82,3 +82,47 @@ class UsuarioRepository:
         except Exception as e:
             print(f"Erro ao verificar existência do nome: {e}")
             return False
+        
+    def antiXSS(self, valor):
+        try:
+            caracteres_perigosos = ["<", ">", "&", "'", '"', "/", "script", "onerror", "onload","select","return","print","delete"]
+
+            for char in caracteres_perigosos:
+                if char in valor.lower():
+                    raise ValueError(f"Entrada suspeita de ataque XSS detectada: '{char}' encontrado.")
+
+            return valor
+        except Exception as e:
+            print(f"Erro ao verificar valor contra XSS: {e}")
+            return None
+
+    def verificarSenha(self, senha):
+        try:
+            if len(senha) < 8:
+                return "A senha deve ter mais de 8 caracteres."
+            maiuscula = False
+            minuscula = False
+            especial = False
+            for char in senha:
+                if char.isupper():
+                    maiuscula = True
+                elif char.islower():
+                    minuscula = True
+                elif char in "!@#$%^&*()-=+[]{}|;:,.<>?/~":
+                    especial = True
+
+            if not maiuscula:
+                return "A senha deve conter pelo menos uma letra maiúscula."
+            if not minuscula:
+                return "A senha deve conter pelo menos uma letra minúscula."
+            if not especial:
+                return "A senha deve conter pelo menos um caractere especial."
+
+            return True
+
+        except Exception as e:
+            print(f"Erro ao verificar a senha: {e}")
+            flash("Erro interno ao verificar a senha.")
+            return None
+
+    

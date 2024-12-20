@@ -51,3 +51,16 @@ class CategoriaRepository:
         except Exception as e:
             print(f"Erro ao buscar categoria por ID: {e}")
             return None
+
+    def antiXSS(self, valor):
+        try:
+            caracteres_perigosos = ["<", ">", "&", "'", '"', "/", "script", "onerror", "onload","select","return","print","delete"]
+
+            for char in caracteres_perigosos:
+                if char in valor.lower():
+                    raise ValueError(f"Entrada suspeita de ataque XSS detectada: '{char}' encontrado.")
+
+            return valor
+        except Exception as e:
+            print(f"Erro ao verificar valor contra XSS: {e}")
+            return None

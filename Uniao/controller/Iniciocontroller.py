@@ -16,7 +16,12 @@ def sucess():
             usuarios=UsuarioDAO.listar_todos()
             emprestimos=EmprestimosDAO.listar_todos()
             return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
-        return render_template("home.html")
+        livros=LivroDAO.searchBooksCustom()
+        categorias=CategoriaDAO.searchCategories()
+        autores=AutorDAO.searchAutores()
+        usuarios=UsuarioDAO.listar_todos()
+        emprestimos=EmprestimosDAO.listar_todos()
+        return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
         
 
 @padraoController.route("/")
@@ -38,6 +43,11 @@ def login():
                 user = usuarioRepository.usuario_existe_por_email(usuario)
             else:
                 user = usuarioRepository.usuario_existe_por_nome(usuario)
+                
+            if usuarioRepository.antiXSS(usuario) or usuarioRepository.antiXSS(senha) == True:
+                flash("Houve um erro: tentativa de XSS", "error")
+                print("Tentativa de XSS")
+                redirect(url_for('bp_inicio.index'))
 
             if user and user.senha == senha:
                 session['usuario'] = user.email

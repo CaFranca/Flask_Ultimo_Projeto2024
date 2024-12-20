@@ -20,6 +20,14 @@ def add_emprestimo():
             if not all([usuario_id, livro_id, data_emprestimo, data_devolucao_prevista]):
                 flash("Todos os campos são obrigatórios.", "error")
                 return redirect(url_for('bp_loan.view_emprestimos'))
+            
+            if (emprestimosRepository.antiXSS(usuario_id) or emprestimosRepository.antiXSS(livro_id) or
+                emprestimosRepository.antiXSS(data_emprestimo) or emprestimosRepository.antiXSS(data_devolucao_prevista_bruta) or
+                emprestimosRepository.antiXSS(data_devolucao_prevista)) == True:
+                flash("Houve um erro: tentativa de XSS", "error")
+                print("Tentativa de XSS")
+                redirect(url_for('bp_inicio.index'))
+
 
             response = emprestimosRepository.criarEmprestimo(
                 usuario_id, livro_id, data_emprestimo, data_devolucao_prevista

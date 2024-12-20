@@ -13,6 +13,11 @@ def add_category():
             flash("O nome da categoria é obrigatório.", "error")
             return redirect(url_for('bp_categories.view_categories'))
         
+        if categoryRepository.antiXSS(nome) == None:
+            flash("Houve um erro: tentativa de XSS", "error")
+            print("Tentativa de XSS")
+            return redirect(url_for('bp_inicio.index'))
+        
         mensagem = categoryRepository.addCategory(nome)
         if "sucesso" in mensagem.lower():
             flash(mensagem, "success")
