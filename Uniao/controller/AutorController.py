@@ -27,12 +27,12 @@ def add_autor():
         data_nascimentobruta = request.form.get("data_nascimento")
         nacionalidade = request.form.get("nacionalidade")
 
-        if autorRepository.antiXSS(nome) == None:
+        if autorRepository.antiXSS(nome):
             flash("Houve um erro: tentativa de XSS", "error")
             print("Tentativa de XSS")
             return redirect(url_for('bp_inicio.index'))
 
-        if autorRepository.antiXSS(nacionalidade) == None:
+        if autorRepository.antiXSS(nacionalidade):
             flash("Houve um erro: tentativa de XSS", "error")
             print("Tentativa de XSS")
             return redirect(url_for('bp_inicio.index'))
@@ -57,13 +57,13 @@ def edit_autor(id):
             nome = request.form.get("nome")
             data_nascimentoBruta = request.form.get("data_nascimento")
             nacionalidade = request.form.get("nacionalidade")
-            
-            if autorRepository.antiXSS(nome) == None:
+
+            if autorRepository.antiXSS(nome):
                 flash("Houve um erro: tentativa de XSS", "error")
                 print("Tentativa de XSS")
                 return redirect(url_for('bp_inicio.index'))
 
-            if autorRepository.antiXSS(nacionalidade) == None:
+            if autorRepository.antiXSS(nacionalidade):
                 flash("Houve um erro: tentativa de XSS", "error")
                 print("Tentativa de XSS")
                 return redirect(url_for('bp_inicio.index'))

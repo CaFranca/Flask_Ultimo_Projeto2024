@@ -1,4 +1,4 @@
-from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask import Blueprint, request, render_template, redirect, url_for, flash, session
 from repository import LivroRepository, UsuarioRepository
 
 livroController = Blueprint("bp_books", __name__)
@@ -9,30 +9,33 @@ usuarioRepository=UsuarioRepository()
 @livroController.route("/add", methods=['POST'])
 def add_book():
     try:
-        
-        titulo = request.form.get('titulo')
-        isbn = int(request.form.get('isbn')) # validação para o isbn conter apenas números
-        data_publicacao = request.form.get('publicadoEm')
-        autor_id = request.form.get('autor_id') 
-        categoria_id = request.form.get('categoria_id')
-        quantidade_total = request.form.get('quantidade_total')
+        # Obtém os dados do formulário enviados pelo usuário
+        titulo = request.form.get('titulo')  # Título do livro
+        isbn = request.form.get('isbn')  # ISBN do livro
+        data_publicacao = request.form.get('publicadoEm')  # Data de publicação do livro
+        autor_id = request.form.get('autor_id')  # ID do autor do livro
+        categoria_id = request.form.get('categoria_id')  # ID da categoria do livro
+        quantidade_total = request.form.get('quantidade_total')  # Quantidade total de exemplares
 
+        # Validação básica dos dados recebidos
         if not (titulo and isbn and data_publicacao and autor_id and categoria_id and quantidade_total):
+            # Caso algum campo obrigatório esteja vazio, exibe uma mensagem de erro
             flash("Todos os campos são obrigatórios.", "error")
-            return redirect(url_for('bp_inicio.index'))
-        
-        if (livroRepository.antiXSS(titulo) is None or
-            livroRepository.antiXSS(data_publicacao) is None or
-            livroRepository.antiXSS(autor_id) is None or
-            livroRepository.antiXSS(categoria_id) is None or
-            livroRepository.antiXSS(quantidade_total) is None):
+            return redirect(url_for('bp_inicio.index'))  # Redireciona de volta para a página inicial
+
+        if (livroRepository.antiXSS(titulo) or
+            livroRepository.antiXSS(data_publicacao) or
+            livroRepository.antiXSS(autor_id) or
+            livroRepository.antiXSS(categoria_id) or
+            livroRepository.antiXSS(quantidade_total)):
             flash("Houve um erro: tentativa de XSS", "error")
             print("Tentativa de XSS")
             return redirect(url_for('bp_inicio.index'))
-
-
+        
+        # Exibe uma mensagem no console para verificar que os dados foram recebidos
         print("Livro recebido")
 
+        # Chama o método addBook do repositório para adicionar o livro no banco de dados
         resultado = livroRepository.addBook(
             titulo=titulo,
             isbn=isbn,
@@ -41,18 +44,20 @@ def add_book():
             categoria_id=categoria_id,
             quantidade_total=quantidade_total
         )
-        
+        # Verifica se o resultado contém um erro e exibe a mensagem correspondente
         if "error" in resultado:
-            flash(resultado["error"], "error")  
+            flash(resultado["error"], "error")  # Mensagem de erro, caso haja
         else:
-            flash("Livro adicionado com sucesso!", "success")  
+            flash("Livro adicionado com sucesso!", "success")  # Mensagem de sucesso, caso o livro seja adicionado com sucesso
 
         # Redireciona de volta para a página inicial
         return redirect(url_for('bp_inicio.index'))
 
     except Exception as e:
-        flash(f"Ocorreu um erro: {e}", "error")
-        return redirect(url_for('bp_inicio.index'))
+        # Caso ocorra alguma exceção durante o processo, captura o erro e exibe uma mensagem
+        print("Fudeu")  # Exibe no console que houve um erro (mensagem de debug)
+        flash(f"Ocorreu um erro: {e}", "error")  # Exibe a mensagem de erro para o usuário
+        return redirect(url_for('bp_inicio.index'))  # Redireciona de volta para a página inicial
 
 
 
@@ -69,22 +74,31 @@ def view_books():
             titulo=titulo,
             autor_id=autor_id,
             categoria_id=categoria_id,
-            data_inicio=data_inicio
-            
+            data_inicio=data_inicio,
+            isbn=isbn
         )
 
         autores = livroRepository.getAutores()
         categorias = livroRepository.getCategorias()
 
-        return render_template(
-            'Livro/livros.html',
-            livros=livros,
-            autores=autores,
-            categorias=categorias
-        )
+        if session.get("tipo") == "admin":
+            return render_template(
+                'Livro/livros-admin.html',
+                livros=livros,
+                autores=autores,
+                categorias=categorias
+            )
+        else:
+            return render_template(
+                "Livro/livros-visitante.html",
+                livros=livros,
+                autores=autores,
+                categorias=categorias
+            )
+    
     except Exception as e:
         flash(f"Erro ao carregar os livros: {e}", "error")
-        return render_template('Livro/livros.html', livros=[], autores=[], categorias=[])
+        return render_template('Livro/livros-admin.html', livros=[], autores=[], categorias=[])
 
 
 @livroController.route('/editar/<int:id>', methods=['GET', 'POST'])
@@ -101,17 +115,6 @@ def edit_book(id):
             if not (titulo and isbn and data_publicacao  and autor_id and categoria_id and quantidade_total):
                 flash("Todos os campos são obrigatórios.", "error")
                 return redirect(url_for('bp_books.edit_book', id=id))
-
-            if (livroRepository.antiXSS(titulo) is None or
-                livroRepository.antiXSS(isbn) is None or
-                livroRepository.antiXSS(data_publicacao) is None or
-                livroRepository.antiXSS(autor_id) is None or
-                livroRepository.antiXSS(categoria_id) is None or
-                livroRepository.antiXSS(quantidade_total) is None):
-                flash("Houve um erro: tentativa de XSS", "error")
-                print("Tentativa de XSS")
-                return redirect(url_for('bp_books.edit_book'))
-
 
             resultado = livroRepository.updateBook(
                 id, titulo, isbn, data_publicacao, autor_id, categoria_id, quantidade_total

@@ -41,8 +41,9 @@ def login():
                 user = usuarioRepository.usuario_existe_por_email(usuario)
             else:
                 user = usuarioRepository.usuario_existe_por_nome(usuario)
-                
-            if usuarioRepository.antiXSS(usuario) or usuarioRepository.antiXSS(senha) == True:
+
+            if usuarioRepository.antiXSS(usuario) or usuarioRepository.antiXSS(senha):
+
                 flash("Houve um erro: tentativa de XSS", "error")
                 print("Tentativa de XSS")
                 redirect(url_for('bp_inicio.index'))
