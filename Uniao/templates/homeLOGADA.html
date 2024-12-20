@@ -23,10 +23,13 @@
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         {% include "Bases/sidenav.html"%}
 
-        <p>Seja bem vindo, {{nome}}!.</p>
-
-        <a href="{{ url_for('bp_inicio.login') }}" class="pure-button">Fazer login</a>
+        <h2 style="color: rgb(35, 35, 196);">O que pretende fazer hoje?</h1>
         <hr>
+
+        <a class="pure-button pure-button-primary" href="{{ url_for('bp_books.view_books') }}">Ver Acervo</a><br>
+        <a class="pure-button" href='{{ url_for("bp_autores.index") }}'>Lista de autores</a><br>
+        <a class="pure-button" href='{{ url_for("bp_categories.view_categories") }}'>Lista de Categorias</a>
+        
         
         {% include "Bases/flash.html"%}
 

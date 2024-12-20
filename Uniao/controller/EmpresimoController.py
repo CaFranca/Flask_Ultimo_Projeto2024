@@ -1,10 +1,11 @@
-from flask import Blueprint, request, redirect, url_for, render_template, flash
-from repository import EmprestimosRepository, LivroRepository
+from flask import Blueprint, request, redirect, url_for, render_template, flash, session
+from repository import EmprestimosRepository, LivroRepository, UsuarioRepository
 from datetime import datetime
 
 emprestimoController = Blueprint('bp_loan', __name__)
 emprestimosRepository = EmprestimosRepository()
 livro_repository = LivroRepository()
+usuarioRepository = UsuarioRepository()
 
 @emprestimoController.route('/add', methods=['POST','GET'])
 def add_emprestimo():
@@ -51,11 +52,14 @@ def add_emprestimo():
 @emprestimoController.route('/', methods=['GET'])
 def view_emprestimos():
     try:
-        # Busca todos os empréstimos para exibição
-        emprestimos = emprestimosRepository.listarTodosJSON()
-        usuarios = emprestimosRepository.getUsuarios()
-        livros = emprestimosRepository.getLivros()
-        return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos, livros=livros, usuarios=usuarios)
+        if session.get("tipo") == "admin":
+            # Busca todos os empréstimos para exibição
+            emprestimos = emprestimosRepository.listarTodosJSON()
+            usuarios = emprestimosRepository.getUsuarios()
+            livros = emprestimosRepository.getLivros()
+            return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos, livros=livros, usuarios=usuarios)
+        
+
     except Exception as e:
         flash(f"Erro ao carregar os empréstimos: {e}", "error")
         print(f"Erro ao carregar os empréstimos: {e}", "error")
