@@ -9,24 +9,22 @@ usuarioRepository= UsuarioRepository()
 # Rota inicial para renderizar uma página específica para autores
 @padraoController.route("/sucess")
 def sucess():
-        if session.get("tipo") != "admin":
-            livros=LivroDAO.searchBooksCustom()
-            categorias=CategoriaDAO.searchCategories()
-            autores=AutorDAO.searchAutores()
-            usuarios=UsuarioDAO.listar_todos()
-            emprestimos=EmprestimosDAO.listar_todos()
-            return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
         livros=LivroDAO.searchBooksCustom()
         categorias=CategoriaDAO.searchCategories()
         autores=AutorDAO.searchAutores()
         usuarios=UsuarioDAO.listar_todos()
         emprestimos=EmprestimosDAO.listar_todos()
-        return render_template("home.html", livros=livros, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
-        
+        nome = session['nome']
+        if session.get("tipo") != "admin":
+            return render_template("homeLOGADA.html", livros=livros, nome=nome, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
+        return render_template("admin.html", livros=livros, nome=nome, autores=autores, categorias=categorias,usuarios=usuarios, emprestimos=emprestimos)
 
 @padraoController.route("/")
 def index():
-    return redirect(url_for('bp_inicio.login'))
+    if 'usuario' in session:
+        return redirect(url_for('bp_inicio.sucess'))
+
+    return render_template("home.html", nome="Visitante")
 
 @padraoController.route("/login", methods=["GET", "POST"])
 def login():
@@ -48,7 +46,6 @@ def login():
                 flash("Houve um erro: tentativa de XSS", "error")
                 print("Tentativa de XSS")
                 redirect(url_for('bp_inicio.index'))
-
             if user and user.senha == senha:
                 session['usuario'] = user.email
                 session['nome'] = user.nome
