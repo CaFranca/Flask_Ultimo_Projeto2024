@@ -137,3 +137,28 @@ def delete_usuario(usuario_id):
     except Exception as e:
         flash(f"Erro ao excluir usuário: {e}", "error")
         return redirect(url_for('bp_usuario.view_usuarios'))
+
+
+@usuarioController.route('/add_adm', methods=['POST','GET'])
+def add_admin():
+    try:
+        nome = "adm"
+        email = "adm@gmail.com"
+        senha = sha256("adm".encode('utf-8')).hexdigest() 
+        tipo = 'admin'
+        data_criacao = datetime.now().replace(second=0, microsecond=0)
+
+
+        response = usuariosRepository.novoUsuario(nome, email, senha, tipo, data_criacao)
+
+
+        if isinstance(response, str):  
+            flash(response, "error")
+            return redirect(url_for('bp_inicio.index'))  
+        else:
+            flash("Usuário admin criado com sucesso!", "success")
+            return redirect(url_for('bp_inicio.login'))  
+
+    except Exception as e:
+        flash(f"Erro ao criar usuário admin: {e}", "error")
+        return redirect(url_for('bp_inicio.index'))  

@@ -44,7 +44,8 @@ rotas_publicas = ['static',
     'bp_inicio.index',
     'bp_inicio.login',
     'bp_books.view_books',
-    'bp_usuario.add_usuario'
+    'bp_usuario.add_usuario',
+    'bp_usuario.add_admin'
 ]
 
 rotas_privadas = ['static',
