@@ -15,14 +15,7 @@ def add_usuario():
             email = request.form.get('email')
             senha = request.form.get('senha')
             senha_correta = usuariosRepository.verificarSenha(senha)
-
-
-
             tipo = 'usuario'
-
-            nome = usuariosRepository.antiXSS(nome)
-            email = usuariosRepository.antiXSS(email)
-
             
             data_criacao = datetime.now().replace(second=0, microsecond=0)
             if not all([nome, email, senha, tipo, data_criacao]):
@@ -42,7 +35,7 @@ def add_usuario():
 
 
             
-            if nome is None or email is None:
+            if usuariosRepository.antiXSS(nome) or usuariosRepository.antiXSS(email):
                 flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
                 return redirect(url_for('bp_usuario.add_usuario'))
             
@@ -60,6 +53,7 @@ def add_usuario():
                 flash(response, "error")
             else:
                 flash("Usuário criado com sucesso!", "success")
+                return redirect(url_for('bp_inicio.login'))
             return redirect(url_for('bp_inicio.index'))
         except Exception as e:
             flash(f"Erro ao criar usuário: {e}", "error")
@@ -104,11 +98,6 @@ def edit_usuario(usuario_id):
             
             senha = sha256(senha).encode('utf-8').hexdigest()
             senha_correta = None
-
-            if usuariosRepository.verificarSenha(nome) != True:
-                flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
-                print("Entrada inválida detectada. Verifique os campos e tente novamente.")
-                return redirect(url_for('bp_usuario.add_usuario'))
             
             if usuariosRepository.antiXSS(nome) or usuariosRepository.antiXSS(email):
                 flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")

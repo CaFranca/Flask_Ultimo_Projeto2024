@@ -21,35 +21,29 @@ rotas_privadas_administrativas = ['static',
     'bp_loan.add_emprestimo',
     'bp_loan.edit_emprestimo',
     'bp_loan.deletar_emprestimo',
+    'bp_loan.listar_por_usuario',
     'bp_multas.gerar_multa',
     'bp_multas.excluir_multa',
+    'bp_usuario.view_usuarios',
     'bp_usuario.edit_usuario',
-    'bp_usuario.delete_usuario',
+    'bp_usuario.delete_usuario'
     'bp_books.addBase',
     'bp_categories.criar_categorias_demo',
     'bp_autores.add_varios_autores'
 ]
 
 rotas_publicas = ['static',
-    'bp_autores.view_autores',
-    'bp_autores.index',
-    'bp_categories.view_categories',
     'bp_loan.listar_por_livro',
-    'bp_loan.listar_por_usuario',
     'bp_inicio.index',
     'bp_inicio.login',
     'bp_books.view_books',
-    'bp_multas.listar_multas',
     'bp_usuario.add_usuario'
 ]
 
 rotas_privadas = ['static',
-    'bp_autores.add_autor',
-    'bp_autores.edit_autor',
-    'bp_autores.delete_autor',
-    'bp_categories.add_category',
-    'bp_categories.edit_category',
-    'bp_categories.delete_category',
+    'bp_autores.view_autores',
+    'bp_autores.index',
+    'bp_categories.view_categories',
     'bp_loan.add_emprestimo',
     'bp_loan.marcar_devolvido',
     'bp_loan.edit_emprestimo',
@@ -64,9 +58,7 @@ rotas_privadas = ['static',
     'bp_multas.gerar_multa',
     'bp_multas.pagar_multa',
     'bp_multas.excluir_multa',
-    'bp_usuario.view_usuarios',
-    'bp_usuario.edit_usuario',
-    'bp_usuario.delete_usuario'
+
 ]
 
 @app.before_request
