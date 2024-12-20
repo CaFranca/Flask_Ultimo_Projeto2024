@@ -17,17 +17,11 @@
     </header>
 
     <main>
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            <p class="{{ category }} pure-button">{{message}}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+        {% include "Bases/flash.html"%}
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
         
         <h2>Usuários Cadastrados 📋</h2>
 
@@ -54,12 +48,12 @@
                     <td>{{ usuario.data_criacao }}</td>
                     <td>
                         <button  class="imagem-botao" style="display:inline;">
-                            <a href="{{ url_for('bp_usuario.edit_usuario', usuario_id=usuario.id) }}"><img src="/static/img/pencil.svg" alt="Excluir"></a>
+                            <a href="{{ url_for('bp_usuario.edit_usuario', usuario_id=usuario.id) }}"><img src="{{url_for('static', filename='img/pencil.svg')}}" alt="Editar"></a>
                         </button>
                         <form action="{{ url_for('bp_usuario.delete_usuario', usuario_id=usuario.id) }}" method="POST" style="display:inline;">
                             
                                 <button type="submit" style="cursor: pointer;" class="imagem-botao" onclick="return confirm('Tem certeza que deseja excluir este usuário?')"> 
-                                    <img style="cursor: pointer;;" src="/static/img/delete.svg" alt="Excluir">
+                                    <img style="cursor: pointer;" src="{{url_for('static', filename='img/delete.svg')}}" alt="Excluir">
                                 </button>
                             
                         </form>
@@ -77,13 +71,10 @@
 
     </main>
 
-    <footer>
+    {% include "Bases/rodape.html"%}
+    <button class="pure-button pure-button-primary"><a href="{{ url_for('bp_usuario.add_usuario') }}">Adicionar Novo Usuário</a></button><br><br>
+    <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a></button>
 
-        <button class="pure-button pure-button-primary"><a href="{{ url_for('bp_usuario.add_usuario') }}">Adicionar Novo Usuário</a></button><br><br>
-        
-
-        <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a></button>
-    </footer>
 
 </body>
 

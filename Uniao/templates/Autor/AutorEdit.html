@@ -19,17 +19,12 @@
     <!-- Conteúdo Principal -->
     <main>
         <!-- Mensagens Flash -->
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            <p class="{{ category }} pure-button">{{ message }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+        {% include "Bases/flash.html"%}
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+
+        {% include "Bases/sidenav.html"%}
 
         <!-- Formulário de Edição de Autor -->
         <div class="super-centralizar">
@@ -57,22 +52,23 @@
                         </div>
 
                         <!-- Botão para salvar alterações -->
-                        <div class="pure-controls">
+                        <div class="pure-control-group">
+                            <label></label>
                             <button type="submit" class="pure-button pure-button-primary pure-input-1-1">Salvar Alterações</button>
+                        </div>
+                        <div class="pure-control-group">
+                            <label></label>
+                            <a class="pure-button pure-button-secondary" href="{{ url_for('bp_autores.view_autores') }}">Voltar para a lista de autores</a>
                         </div>
                     </fieldset>
                 </form>
-
-                <!-- Botão para voltar à lista de autores -->
-                <p><button class="pure-button pure-button-secondary"><a href="{{ url_for('bp_autores.view_autores') }}">Voltar para a lista de autores</a></button></p>
+                
             </div>
         </div>
     </main>
 
     <!-- Rodapé -->
-    <footer>
-        <p class="centralizar">&copy; 2024 Biblioteca Igao. Todos os direitos reservados.</p>
-    </footer>
+    {% include "Bases/rodape.html"%}
 
 </body>
 

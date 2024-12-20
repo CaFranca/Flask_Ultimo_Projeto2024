@@ -17,18 +17,11 @@
 
     <main>
         <!-- Mensagens Flash -->
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
-
+        {% include "Bases/flash.html"%}
+        
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
         <!-- Formulário de edição de empréstimo -->
         <div class="super-centralizar">
             <div class="formulario">
@@ -89,10 +82,7 @@
     </main>
 
     <!-- Rodapé -->
-    <footer>
-        <div class="centralizar"></div>
-        <p class="centralizar">&copy; 2024 Sistema de Gestão de Empréstimos</p>
-    </footer>
+    {% include "Bases/rodape.html"%}
 
 </body>
 

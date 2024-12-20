@@ -9,20 +9,10 @@
 </head>
 <body>
     <main>
-        <h1>Faça o seu login! 🖥️</h1>
 
-        <!-- Mensagens Flash -->
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            <p class="{{ category }} pure-button">{{message}}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+        <h1>Faça o seu login! 🖥️</h1>
+        {% include "Bases/flash.html"%}
+
 
         <div class="super-centralizar">
             <div class="formulario">
@@ -46,8 +36,16 @@
                     </fieldset>
                 </form>
 
-            <p>Não tem uma conta? <br><br> <button class="pure-button"><a href="{{ url_for('bp_usuario.add_usuario') }}">Cadastre-se aqui</a></button></p>
+                <p>Não tem uma conta? <br> <button class="pure-button"><a href="{{ url_for('bp_usuario.add_usuario') }}">Cadastre-se aqui</a></button></p>
+                <br>
+                <p>Voltar ao Início <br> <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}">Home</a></button></p>
         </div>
+
+        <!-- Mensagens Flash -->
     </main>
+    
+    {% include "Bases/rodape.html"%}
+
+    
 </body>
 </html>

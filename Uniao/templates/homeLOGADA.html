@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca do Igão - Home Usuário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"> <!-- A base é o https://pure-css.github.io/ --> <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}"> 
+</head>
+
+<body>
+    <header>
+        <h1 class="centralizar">Biblioteca do Igao</h1>
+    </header>
+
+    <main>
+        <h2 class="centralizar">Bem-vindo, {{nome}}!! Você está logado em nosso sistema.😀</h2><br>
+
+        <span class="pure-button-secondary" style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        {% include "Bases/sidenav.html"%}
+
+        <p>Seja bem vindo, {{nome}}!.</p>
+
+        <a href="{{ url_for('bp_inicio.login') }}" class="pure-button">Fazer login</a>
+        <hr>
+        
+        {% include "Bases/flash.html"%}
+
+    </main>
+
+    <!-- Rodapé da página -->
+        {% include "Bases/rodape.html"%}
+
+    <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+
+</body>
+</html>

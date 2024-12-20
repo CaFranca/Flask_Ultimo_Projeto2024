@@ -16,19 +16,13 @@
     </header>
 
     <main>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="flash_messages">
-            {% for message in messages %}
-            <div class="alert alert-warning" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
+        {% include "Bases/flash.html"%}
 
-        <h2>Multas Cadastrados 📋</h2>
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
+
+        <h2>Multas Cadastradas 📋</h2>
         
         <table class="pure-table">
             <thead>
@@ -63,9 +57,8 @@
         </table>
     </main>
 
-    <footer>
-        <a href="{{ url_for('bp_inicio.index') }}" class="pure-button">Voltar à Página Inicial</a>
-    </footer>
+    {% include "Bases/rodape.html"%}
+
 
 </body>
 

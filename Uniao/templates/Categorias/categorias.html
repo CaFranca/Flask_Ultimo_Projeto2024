@@ -18,26 +18,29 @@
     </header>
 
     <main>
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
+
+        
         <!-- Mensagens Flash -->
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            <p class="{{ category }} pure-button">{{ message }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
+         
+        {% include "Bases/flash.html"%}
+
+        <div class="imagem-botao toggle-button cancelar-animacao" data-target="esconder-categoria" onclick="toggleContent(this)">
+            <button class="pure-button pure-button-primary">Menu de Cadastro de Categoria</button>
+        </div>
+        
+        <div id="esconder-categoria" class="esconder">
+            {% include "Categorias/addcategoria.html" %}
         </div>
 
+        
         <!-- Título secundário -->
         <h2>Categorias Cadastradas 📋</h2>
 
         <!-- Botões de ação -->
-        <div>
-            <a href="{{ url_for('bp_inicio.sucess') }}" class="pure-button pure-button-primary">Adicionar Nova Categoria</a>
-        </div><br>
 
         <!-- Tabela que exibirá os dados das categorias -->
         <table class="pure-table">
@@ -57,10 +60,12 @@
                         <td>{{ categoria.id }}</td>
                         <td>{{ categoria.nome }}</td>
                         <td>
-                            <a href="{{ url_for('bp_categories.edit_category', id=categoria.id) }}" class="pure-button pure-button-secondary">Editar</a>
+                            <button  class="imagem-botao" style="display:inline;">
+                                <a href="{{ url_for('bp_categories.edit_category', id=categoria.id) }}"> <img src="{{url_for('static', filename='img/pencil.svg')}}" alt="Editar"></a>
+                            </button>
                             <form action="{{ url_for('bp_categories.delete_category', id=categoria.id) }}" method="POST" style="display:inline;">
-                                <button type="submit" class="pure-button pure-button-error" onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
-                                    Excluir
+                                <button type="submit" style="cursor: pointer;" class="imagem-botao" onclick="return confirm('Tem certeza que deseja excluir esta categoria?')">
+                                    <img style="cursor: pointer;" src="{{url_for('static', filename='img/delete.svg')}}" alt="Excluir">
                                 </button>
                             </form>
                         </td>
@@ -74,12 +79,12 @@
             </tbody>
         </table>
 
+
     </main>
 
     <!-- Rodapé da página -->
-    <footer>
-        <a href="{{ url_for('bp_inicio.index') }}" class="pure-button">Voltar à Página Inicial</a>
-    </footer>
+    {% include "Bases/rodape.html"%}
+
 
 </body>
 

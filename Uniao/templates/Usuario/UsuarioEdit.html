@@ -14,17 +14,12 @@
         <h1>Editar Usuário 👤</h1>
 
         <!-- Mensagens Flash -->
-        <div class="flash_messages">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-warning" role="alert">
-                            <p class="{{ category }} pure-button">{{ message }}</p>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div>
+        {% include "Bases/flash.html"%}
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
+
 
         <div class="super-centralizar">
             <div class="formulario">
@@ -71,13 +66,8 @@
         </div>
     </main>
 
-    <!-- Rodapé com link para voltar à lista de usuários -->
-    <footer>
-        <div class="centralizar">
-        </div>
-        <p class="centralizar">&copy; 2024 Sistema de Gestão de Usuários</p>
-    </footer>
+    {% include "Bases/rodape.html"%}
+
 </body>
 
 </html>
-'

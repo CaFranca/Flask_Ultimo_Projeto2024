@@ -16,7 +16,23 @@
     </header>
 
     <main>
-        <section>
+        {% include "Bases/flash.html"%}
+
+        <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+        <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
+        {% include "Bases/sidenav.html"%}
+        
+        <div class="imagem-botao toggle-button cancelar-animacao" data-target="esconder" onclick="toggleContent(this)">
+            <button class="pure-button pure-button-primary">Menu para Adicionar Empréstimo</button> 
+        </div>
+
+        <div id="esconder" class="esconder">
+            {% include "Emprestimo/addemprestimo.html" %}
+        </div>
+
+        </div>
+
+        
             <h2>Buscar Empréstimos</h2>
             <form method="GET" action="{{ url_for('bp_loan.view_emprestimos') }}">
                 <div class="form-group">
@@ -38,22 +54,10 @@
                     <button type="submit" class="pure-button" style="background-color: #f44336;">Limpar Filtros</button>
                 </div>
             </form>
-        </section>
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <div class="alert alert-warning" role="alert">
-                    {{message}}
-                </div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
 
         <h2>Empréstimos Cadastrados</h2>
-        <div>
-            <a href="{{ url_for('bp_loan.add_emprestimo') }}" class="pure-button pure-button-primary">Adicionar Novo Empréstimo</a>
-        </div>
+
 
         <table class="pure-table">
             <thead>
@@ -120,9 +124,8 @@
         </table>
     </main>
 
-    <footer>
-        <a href="{{ url_for('bp_inicio.index') }}" class="pure-button">Voltar à Página Inicial</a>
-    </footer>
+    {% include "Bases/rodape.html"%}
+
 
 </body>
 
