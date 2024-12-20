@@ -97,7 +97,6 @@ class LivroRepository:
                 if char in valor.lower():
                     return True
             return False
-        
         except Exception as e:
             print(f"Erro ao verificar valor contra XSS: {e}")
             return None

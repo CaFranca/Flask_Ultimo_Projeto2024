@@ -59,9 +59,8 @@ class MultasRepository:
 
             for char in caracteres_perigosos:
                 if char in valor.lower():
-                    raise ValueError(f"Entrada suspeita de ataque XSS detectada: '{char}' encontrado.")
-
-            return valor
+                    return True
+            return False
         except Exception as e:
             print(f"Erro ao verificar valor contra XSS: {e}")
             return None
