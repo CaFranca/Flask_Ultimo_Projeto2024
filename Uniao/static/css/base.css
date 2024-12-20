@@ -490,6 +490,11 @@ a.pure-button-selected {
   background-color: #0078e7;
   color: #fff
 }
+.pure-button-purple
+{
+  background-color: #4f19e4;
+  color: #fff
+}
 
 .pure-button-group .pure-button {
   margin: 0;

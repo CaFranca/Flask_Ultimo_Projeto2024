@@ -16,7 +16,7 @@
     </header>
 
     <main>
-        <h2 class="centralizar">Bem-vindo, {{nome}}!! Você está logado em nosso sistema.😀</h2><br>
+        <h2 class="centralizar">Bem-vindo, {{nome}}!! Você está logado em nosso sistema 😀</h2><br>
 
         <span class="pure-button-secondary" style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
         
@@ -25,12 +25,14 @@
 
         <h2 style="color: rgb(35, 35, 196);">O que pretende fazer hoje?</h1>
         <hr>
+        
+        <div style="display: flex; gap: 10px;":>
+            <a class="pure-button pure-button-purple" href="{{ url_for('bp_books.view_books') }}">Ver Acervo</a>
+            <a class="pure-button pure-button-purple" href='{{ url_for("bp_autores.index") }}'>Lista de Autores</a>
+            <a class="pure-button pure-button-purple" href='{{ url_for("bp_categories.view_categories") }}'>Lista de Categorias</a>
 
-        <a class="pure-button pure-button-primary" href="{{ url_for('bp_books.view_books') }}">Ver Acervo</a><br>
-        <a class="pure-button" href='{{ url_for("bp_autores.index") }}'>Lista de autores</a><br>
-        <a class="pure-button" href='{{ url_for("bp_categories.view_categories") }}'>Lista de Categorias</a>
-        
-        
+        </div>
+
         {% include "Bases/flash.html"%}
 
     </main>

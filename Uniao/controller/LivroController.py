@@ -1,9 +1,10 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash, session
-from repository import LivroRepository, UsuarioRepository
+from repository import LivroRepository, UsuarioRepository, LogRepository
 
 livroController = Blueprint("bp_books", __name__)
 livroRepository = LivroRepository()
 usuarioRepository=UsuarioRepository()
+logRepository = LogRepository()
 
 # Rota para adicionar um novo livro
 @livroController.route("/add", methods=['POST'])
@@ -48,6 +49,7 @@ def add_book():
         if "error" in resultado:
             flash(resultado["error"], "error")  # Mensagem de erro, caso haja
         else:
+            logRepository.registrar_log("Livro adicionado com sucesso.", "success")
             flash("Livro adicionado com sucesso!", "success")  # Mensagem de sucesso, caso o livro seja adicionado com sucesso
 
         # Redireciona de volta para a página inicial
@@ -97,6 +99,7 @@ def view_books():
             )
     
     except Exception as e:
+        logRepository.registrar_log("Erro ao carregar os livros", "error")
         flash(f"Erro ao carregar os livros: {e}", "error")
         return render_template('Livro/livros-admin.html', livros=[], autores=[], categorias=[])
 
