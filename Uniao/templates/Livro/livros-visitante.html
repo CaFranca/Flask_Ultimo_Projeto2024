@@ -21,12 +21,11 @@
         <!-- Exibição de mensagens de alerta -->
         {% include "Bases/flash.html"%}
         <br>
-        <a href="{{ url_for('bp_inicio.index') }}" class="pure-button pure-button-primary">Voltar à Página Inicial</a>
+        <a href=" {{ url_for('bp_inicio.index')}}" class="pure-button pure-button-purple">Home</a>
         <br><br>
         <div class="formulario">
 
           <h2>Filtrar Livros</h2>
-          <br><button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a></button>   
           <form method="GET" action="{{ url_for('bp_books.view_books') }}" class="pure-form pure-form-aligned">
             <fieldset>
               <div class="pure-control-group">

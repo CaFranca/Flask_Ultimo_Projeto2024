@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
-from repository import UsuarioRepository
+from repository import UsuarioRepository, LogRepository
 from hashlib import sha256
 from datetime import datetime
 

@@ -490,8 +490,8 @@ a.pure-button-selected {
   background-color: #0078e7;
   color: #fff
 }
-.pure-button-purple
-{
+
+.pure-button-purple {
   background-color: #4f19e4;
   color: #fff
 }
@@ -529,7 +529,7 @@ a.pure-button-selected {
 .pure-form input[type=week],
 .pure-form select,
 .pure-form textarea {
-  padding: .5em .6em;
+  padding: .3em .4em;
   display: inline-block;
   border: 1px solid #ccc;
   box-shadow: inset 0 1px 3px #ddd;
@@ -539,7 +539,7 @@ a.pure-button-selected {
 }
 
 .pure-form input:not([type]) {
-  padding: .5em .6em;
+  padding: .3em .4em;
   display: inline-block;
   border: 1px solid #ccc;
   box-shadow: inset 0 1px 3px #ddd;
@@ -1209,16 +1209,18 @@ body {
   height: 24px;
 }
 
-.toggle-button, .cancelar-animacao {
+.toggle-button,
+.cancelar-animacao {
   display: flex;
   align-items: center;
   cursor: pointer;
   user-select: none;
 }
-.cancelar-animacao
-{
+
+.cancelar-animacao {
   display: block;
 }
+
 .toggle-button span {
   transform: rotate(0deg);
   /* Setinha inicial para a direita */
@@ -1242,13 +1244,14 @@ body {
   display: block;
 }
 
-a
-{
+a {
   text-decoration: none;
   color: inherit;
 }
 
 p {
-  font-size: 16px;            /* Tamanho da fonte */
-  line-height: 1.5;           /* Espaçamento entre as linhas */
+  font-size: 16px;
+  /* Tamanho da fonte */
+  line-height: 1.5;
+  /* Espaçamento entre as linhas */
 }

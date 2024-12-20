@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from repository import AutorRepository, UsuarioRepository
+from repository import AutorRepository, UsuarioRepository, LogRepository
 from datetime import datetime
 
 # Cria o blueprint para a rota de autores
@@ -144,3 +144,4 @@ def add_varios_autores():
     except Exception as e:
         flash(f"Erro ao adicionar autores: {e}", "error")
         return redirect(url_for('bp_inicio.index'))
+    

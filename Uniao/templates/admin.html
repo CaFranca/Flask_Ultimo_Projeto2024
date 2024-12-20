@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca - Painel de Administrador</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"> <!-- A base é o https://pure-css.github.io/ --> <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- A base é o https://pure-css.github.io/ -->
+    <!-- Ela é grande pois baixei o pure css, ao invés de puxar da internet.-->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario.css') }}">
 </head>
 
 
@@ -19,15 +21,18 @@
     <main>
         <h2 class="centralizar">Bem-vindo ao Painel de Administrador, {{nome}}!! 😀</h2><br>
         <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
-        
+
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
 
         {% include "Bases/sidenav.html"%}
 
-        <p>Selecione uma das opções abaixo para gerenciar e visualizar <b>livros</b>, <b>categorias</b>, <b>autores</b>, <b>empréstimos</b> e <b>usuários</b>.</p>
+
+        <p>Selecione uma das opções abaixo para gerenciar e visualizar <b>livros</b>, <b>categorias</b>, <b>autores</b>,
+            <b>empréstimos</b> e <b>usuários</b>.
+        </p>
 
         <div class="imagem-botao toggle-button" data-target="formularios1" onclick="toggleContent(this)">
-            <p>Livros - Categorias - Autores &nbsp; </p>         
+            <p>Livros - Categorias - Autores &nbsp; </p>
             <span><img src="{{url_for('static', filename='img/arrow.svg')}}"></span> <!-- Setinha para a direita -->
         </div>
 
@@ -40,28 +45,30 @@
                 {% include "Autor/addautor.html" %}
 
             </div> <!-- Aqui termina a primeira fileira de formulários-->
-            
+
         </div>
         <hr>
 
         <div class="imagem-botao toggle-button" data-target="formularios2" onclick="toggleContent(this)">
             <p>Empréstimos - Usuários &nbsp;</p>
-            <span> <span><img src="{{url_for('static', filename='img/arrow.svg')}}"></span> <!-- Setinha para a direita -->
-        </span> 
+            <span> <span><img src="{{url_for('static', filename='img/arrow.svg')}}"></span>
+                <!-- Setinha para a direita -->
+            </span>
 
         </div>
 
         <div id="formularios2" class="formularios-esconder"> <!-- Aqui começa a segunda fileira de formulários-->
             <div class="formularios-container"></div>
 
-                {% include "Emprestimo/addemprestimo.html"%}
+            {% include "Emprestimo/addemprestimo.html"%}
 
-                <div class="formulario">
-                    <h1 class="centralizar">Controle de Usuários</h1>
-                    <button class="pure-button centralizar"><a href="{{ url_for('bp_usuario.view_usuarios') }}">Ver Usuários</a></button>
-                </div>
-        
-            </div> 
+            <div class="formulario">
+                <h1 class="centralizar">Controle de Usuários</h1>
+                <button class="pure-button centralizar"><a href="{{ url_for('bp_usuario.view_usuarios') }}">Ver
+                        Usuários</a></button>
+            </div>
+
+        </div>
         </div>
 
         {% include "Bases/flash.html"%}
@@ -73,4 +80,5 @@
 
 
 </body>
+
 </html>

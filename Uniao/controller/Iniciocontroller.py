@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template,request,session,redirect,url_for,flash
 from hashlib import sha256
 from DAO import AutorDAO, LivroDAO, CategoriaDAO,UsuarioDAO, EmprestimosDAO
-from repository import UsuarioRepository
+from repository import UsuarioRepository, LogRepository
 # Criação de um Blueprint chamado "bp_authors" para gerenciar rotas relacionadas a autores
 padraoController = Blueprint("bp_inicio", __name__)
 usuarioRepository= UsuarioRepository()

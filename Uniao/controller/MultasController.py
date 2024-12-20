@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash
-from repository import MultasRepository, EmprestimosRepository
+from repository import MultasRepository, EmprestimosRepository, LogRepository
 
 multasController = Blueprint('bp_multas', __name__)
 multasRepository=MultasRepository()

@@ -21,7 +21,9 @@
         <script src="{{ url_for('static', filename='js/base.js') }}"></script>
         <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; Outros Links</span><br><br>
         {% include "Bases/sidenav.html"%}
-            <br><button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}" class="button">Voltar à Página Inicial</a></button>
+        <br>
+        <a href=" {{ url_for('bp_inicio.index')}}" class="pure-button pure-button-purple">Home</a>
+        <br>
         <h2>Multas Cadastradas 📋</h2>
         
         <table class="pure-table">

@@ -1,5 +1,5 @@
 from flask import Blueprint, request, redirect, url_for, render_template, flash, session
-from repository import EmprestimosRepository, LivroRepository, UsuarioRepository
+from repository import EmprestimosRepository, LogRepository, LivroRepository, UsuarioRepository
 from datetime import datetime
 
 emprestimoController = Blueprint('bp_loan', __name__)

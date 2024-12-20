@@ -49,7 +49,7 @@ def add_book():
         if "error" in resultado:
             flash(resultado["error"], "error")  # Mensagem de erro, caso haja
         else:
-            logRepository.registrar_log("Livro adicionado com sucesso.", "success")
+            logRepository.registrar_log("Livro adicionado com sucesso!", "success")
             flash("Livro adicionado com sucesso!", "success")  # Mensagem de sucesso, caso o livro seja adicionado com sucesso
 
         # Redireciona de volta para a página inicial
@@ -57,7 +57,6 @@ def add_book():
 
     except Exception as e:
         # Caso ocorra alguma exceção durante o processo, captura o erro e exibe uma mensagem
-        print("Fudeu")  # Exibe no console que houve um erro (mensagem de debug)
         flash(f"Ocorreu um erro: {e}", "error")  # Exibe a mensagem de erro para o usuário
         return redirect(url_for('bp_inicio.index'))  # Redireciona de volta para a página inicial
 
