@@ -9,8 +9,3 @@
   max-width: calc(33.33% - 20px); /* Evita que os itens cresçam além do necessário */
 }
 
-a
-{
-  text-decoration: none;
-  color: inherit;
-}
