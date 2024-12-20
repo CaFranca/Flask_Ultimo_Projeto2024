@@ -52,12 +52,11 @@ def add_emprestimo():
 @emprestimoController.route('/', methods=['GET'])
 def view_emprestimos():
     try:
-        if session.get("tipo") == "admin":
             # Busca todos os empréstimos para exibição
-            emprestimos = emprestimosRepository.listarTodosJSON()
-            usuarios = emprestimosRepository.getUsuarios()
-            livros = emprestimosRepository.getLivros()
-            return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos, livros=livros, usuarios=usuarios)
+        emprestimos = emprestimosRepository.listarTodosJSON()
+        usuarios = emprestimosRepository.getUsuarios()
+        livros = emprestimosRepository.getLivros()
+        return render_template("Emprestimo/emprestimos.html", emprestimos=emprestimos, livros=livros, usuarios=usuarios)
         
 
     except Exception as e:

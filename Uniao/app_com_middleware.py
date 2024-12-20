@@ -25,7 +25,6 @@ rotas_privadas_administrativas = ['static',
     'bp_loan.marcar_devolvido',
     'bp_loan.deletar_emprestimo',
     'bp_loan.listar_por_usuario',
-    'bp_loan.view_emprestimos',
     'bp_multas.gerar_multa',
     'bp_multas.excluir_multa',
     'bp_usuario.view_usuarios',
@@ -38,7 +37,6 @@ rotas_privadas_administrativas = ['static',
     'bp_multas.gerar_multa',
     'bp_multas.pagar_multa',
     'bp_multas.excluir_multa',
-    'bp_multas.listar_multas',
 
 ]
 
@@ -54,8 +52,10 @@ rotas_privadas = ['static',
     'bp_autores.index',
     'bp_categories.view_categories',
     'bp_loan.listar_por_livro',
+    'bp_loan.view_emprestimos',
     'bp_inicio.sucess',
-    'bp_inicio.logout'
+    'bp_inicio.logout',
+    'bp_multas.listar_multas'
 ]
 
 @app.before_request
@@ -67,7 +67,7 @@ def verificaSessao():
             flash("Bloqueado - Usuário não autenticado. Crie sua conta para (talvez) obter acesso")
             abort(403)
 
-        if request.endpoint in rotas_privadas_administrativas and request.endpoint not in (rotas_publicas or rotas_privadas):
+        if request.endpoint in rotas_privadas_administrativas:
             if session.get("tipo") != "admin":
                 print("Acesso negado - Usuário tentando acessar rota com nível hierárquico superior ao seu")
                 flash("Acesso negado - Usuário tentando acessar rota com nível hierárquico superior ao seu")
