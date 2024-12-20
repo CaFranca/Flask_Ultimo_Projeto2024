@@ -9,7 +9,6 @@ usuariosRepository = UsuarioRepository()
 
 @usuarioController.route('/add', methods=['POST','GET'])
 def add_usuario():
-    referer = request.referrer # Pega de onde a requisição veio. Ela pode ter sido de dois lugares: Painel de Admin e Cadastro. Utilizo essa variável para redirecionar a pessoa para página certa caso algum erro ocorra. 
     if request.method == "POST":
         try:
             nome = request.form.get('nome')
@@ -34,9 +33,9 @@ def add_usuario():
                 flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
                 return redirect(url_for('bp_usuario.add_usuario'))
             
-            senha = sha256(senha).encode('utf-8').hexdigest()
+            senha = sha256(senha.encode('utf-8')).hexdigest()
             senha_correta = None
-            
+
             if "@" not in email:
                 flash("O email deve conter o símbolo @", "info")
                 redirect(url_for('bp_usuario.add_usuario'))
@@ -111,7 +110,7 @@ def edit_usuario(usuario_id):
                 print("Entrada inválida detectada. Verifique os campos e tente novamente.")
                 return redirect(url_for('bp_usuario.add_usuario'))
             
-            if usuariosRepository.antiXSS(nome) is None or usuariosRepository.antiXSS(email) is None:
+            if usuariosRepository.antiXSS(nome) or usuariosRepository.antiXSS(email):
                 flash("Entrada inválida detectada. Verifique os campos e tente novamente.", "error")
                 print("Entrada inválida detectada. Verifique os campos e tente novamente.")
                 return redirect(url_for('bp_usuario.add_usuario'))

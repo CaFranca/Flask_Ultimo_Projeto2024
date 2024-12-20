@@ -33,12 +33,15 @@
                             <label></label>
                             <button type="submit" class="pure-button pure-button-primary pure-input-1-2">Entrar</button>
                         </div>
+                        <p>Não tem uma conta? <br> <button class="pure-button"><a href="{{ url_for('bp_usuario.add_usuario') }}">Cadastre-se aqui</a></button></p>
+                        <br>
+                        <p>Voltar ao Início <br> <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}">Home</a></button></p>
                     </fieldset>
                 </form>
 
-                <p>Não tem uma conta? <br> <button class="pure-button"><a href="{{ url_for('bp_usuario.add_usuario') }}">Cadastre-se aqui</a></button></p>
-                <br>
-                <p>Voltar ao Início <br> <button class="pure-button"><a href="{{ url_for('bp_inicio.index') }}">Home</a></button></p>
+                
+            </div>
+           
         </div>
 
         <!-- Mensagens Flash -->
